@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=6.5.0">
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Frida能干什么？对于不能反编译、重打包的apk，就是Frida的用武之地！ Frida通过代码插桩可以解决很多问题。比如：  我不买会员，想看一下会员页长什么样。 这个app有调试开关，我能不能打开啊？Frida可以！ 我想快速知道，app从启动到某个页面，中间都走了哪些Activity。Frida可以！">
+<meta name="keywords" content="android,crack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="程序员怎么做“竞品分析”：Frida的使用">
+<meta property="og:url" content="http://yoursite.com/posts/e9e40fc1.html">
+<meta property="og:site_name" content="老喵备忘录">
+<meta property="og:description" content="Frida能干什么？对于不能反编译、重打包的apk，就是Frida的用武之地！ Frida通过代码插桩可以解决很多问题。比如：  我不买会员，想看一下会员页长什么样。 这个app有调试开关，我能不能打开啊？Frida可以！ 我想快速知道，app从启动到某个页面，中间都走了哪些Activity。Frida可以！">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/jlgl_1.png">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/jlgl_2.png">
+<meta property="og:updated_time" content="2020-06-03T07:08:02.673Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="程序员怎么做“竞品分析”：Frida的使用">
+<meta name="twitter:description" content="Frida能干什么？对于不能反编译、重打包的apk，就是Frida的用武之地！ Frida通过代码插桩可以解决很多问题。比如：  我不买会员，想看一下会员页长什么样。 这个app有调试开关，我能不能打开啊？Frida可以！ 我想快速知道，app从启动到某个页面，中间都走了哪些Activity。Frida可以！">
+<meta name="twitter:image" content="https://gitee.com/andych008/pic/raw/master/img/jlgl_1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/posts/e9e40fc1.html">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>程序员怎么做“竞品分析”：Frida的使用 | 老喵备忘录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">老喵备忘录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/e9e40fc1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="没用的喵叔">
+      <meta itemprop="description" content="人老了爱忘，所以记下来">
+      <meta itemprop="image" content="/images/1075578.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="老喵备忘录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">程序员怎么做“竞品分析”：Frida的使用
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-04-13 17:38:34" itemprop="dateCreated datePublished" datetime="2020-04-13T17:38:34+08:00">2020-04-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-06-03 15:08:02" itemprop="dateModified" datetime="2020-06-03T15:08:02+08:00">2020-06-03</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/e9e40fc1.html#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/posts/e9e40fc1.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Frida能干什么？对于不能反编译、重打包的apk，就是Frida的用武之地！</p>
+<p>Frida通过代码插桩可以解决很多问题。比如：</p>
+<ol>
+<li>我不买会员，想看一下会员页长什么样。</li>
+<li>这个app有调试开关，我能不能打开啊？Frida可以！</li>
+<li>我想快速知道，app从启动到某个页面，中间都走了哪些<code>Activity</code>。Frida可以！</li>
+</ol>
+<a id="more"></a> 
+<h3 id="官网"><a href="#官网" class="headerlink" title="官网"></a>官网</h3><ul>
+<li><a href="https://www.frida.re/" target="_blank" rel="noopener">Frida 官网</a></li>
+<li><a href="https://github.com/frida/frida" target="_blank" rel="noopener">Frida github</a></li>
+</ul>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><ol>
+<li>电脑安装<code>pip install frida-tools</code></li>
+<li><p>电脑安装，绑定：二选一就行</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install frida       # Python bindings</span><br><span class="line">npm install frida       # Node.js bindings</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载<a href="https://github.com/frida/frida/releases" target="_blank" rel="noopener">server文件</a>(x86模拟器对应<code>frida-server-12.8.20-android-x86</code>)</p>
+</li>
+<li><p>安装server文件</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">adb shell getprop ro.product.cpu.abi#查看cpu架构</span><br><span class="line">adb root</span><br><span class="line">adb push frida-server-12.8.20-android-x86 /data/local/tmp</span><br><span class="line">cd /data/local/tmp</span><br><span class="line">mv frida-server-12.8.20-android-x86 fs</span><br><span class="line">chmod 755 fs</span><br><span class="line">adb shell -x &quot;/data/local/tmp/fs&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试<code>frida-ps -U</code>#列出USB设备运行中的进程，模拟器也是usb设备</p>
+</li>
+<li>测试<code>frida-trace -U -i open com.android.settings</code>，然后打开”设置”，随便点一下，命令行会有显示</li>
+</ol>
+<h3 id="hook"><a href="#hook" class="headerlink" title="hook"></a>hook</h3><p>进行Hook <code>com.hookme.MainActivity#checkXp0</code>函数</p>
+<ul>
+<li><p>脚本<code>imei.js</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(function()&#123;</span><br><span class="line">    console.log(&quot;######&quot;)</span><br><span class="line"></span><br><span class="line">    var logActivity = Java.use(&quot;com.hookme.MainActivity&quot;);</span><br><span class="line">    logActivity.checkXp0.implementation = function()&#123;</span><br><span class="line">        console.log(&quot;Hook&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>命令行载入脚本运行<code>frida -U com.hookme -l imei.js --no-pause --runtime=v8</code></p>
+</li>
+</ul>
+<h3 id="firda-api-补全"><a href="#firda-api-补全" class="headerlink" title="firda api 补全"></a>firda api 补全</h3><p><a href="https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/frida-gum/index.d.ts" target="_blank" rel="noopener">https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/frida-gum/index.d.ts</a> 下载 index.d.ts文件，保存在一个目录下，我是在 ～/workspace/frida/frida-gum.d.ts 下<br>我用 vscode 开发，新建一个 js 文件 在文件开头加入代码</p>
+<p><code>///&lt;reference path=&#39;~/workspace/frida/frida-gum.d.ts&#39;/&gt;</code></p>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><ol>
+<li>手机需要<strong>root</strong></li>
+<li><p>oppo r9m arm-64会失败，自动重启。但是<code>frida-server-12.8.20-android-arm</code>却可用(因为有可能对应的应用刚好是32位的)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@R9:/ $busybox uname -a</span><br><span class="line">Linux localhost 3.10.72+ #1 SMP PREEMPT Mon Mar 14 03:03:58 CST 2016 aarch64 unknown</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后x86 32位 api24成功，使用<code>frida-server-12.8.20-android-x86</code>。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">generic_x86:/ # uname -a</span><br><span class="line">Linux localhost 3.10.0+ #261 SMP PREEMPT Fri May 19 12:50:09 PDT 2017 i686</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>逍遥7.1系统 ok (x86 32位)，在5.1上hook<code>onResume()</code>会失败</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">130|OPPO R11 Plus:/ # uname -m</span><br><span class="line">i686</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意内部类的表示方式<code>var abtest = Java.use(&quot;com.adhoc.config.AdhocConfig$Builder&quot;);</code>是美元符号</p>
+</li>
+</ol>
+<h3 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h3><ul>
+<li>Gadget(免root使用frida)<br><a href="https://www.jianshu.com/p/bab4f4714d98" target="_blank" rel="noopener">https://www.jianshu.com/p/bab4f4714d98</a><br>使用objection自动完成frida gadget注入到apk中<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip3 install -U objection</span><br><span class="line">objection patchapk -s target_app.apk</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="示例“叽里呱啦儿童英语V9-6-0”"><a href="#示例“叽里呱啦儿童英语V9-6-0”" class="headerlink" title="示例“叽里呱啦儿童英语V9.6.0”"></a>示例“叽里呱啦儿童英语V9.6.0”</h3><p><a href="https://github.com/andych008/jiliguala_frida" target="_blank" rel="noopener">脚本源码</a></p>
+<p>先执行<code>node spawn_gating.js</code></p>
+<p>打开应用后执行<code>frida -U com.jiliguala.niuwa -l jiligula.js</code></p>
+<ul>
+<li><p>开启StethoInterceptor，所有网络请求可见。开启logcat日志开关。打印自定义日志。</p>
+<p> <img src="https://gitee.com/andych008/pic/raw/master/img/jlgl_1.png" alt></p>
+<p> <img src="https://gitee.com/andych008/pic/raw/master/img/jlgl_2.png" alt></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+            <a href="/tags/crack/" rel="tag"># crack</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/eb4601f.html" rel="next" title="程序员怎么做“竞品分析”：动态调试apk(AS + Smalidea)">
+                <i class="fa fa-chevron-left"></i> 程序员怎么做“竞品分析”：动态调试apk(AS + Smalidea)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/c5453a86.html" rel="prev" title="DecorView的创建、显示流程">
+                DecorView的创建、显示流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/1075578.gif" alt="没用的喵叔">
+            
+              <p class="site-author-name" itemprop="name">没用的喵叔</p>
+              <p class="site-description motion-element" itemprop="description">人老了爱忘，所以记下来</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/andych008" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:andych008@163.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#官网"><span class="nav-number">1.</span> <span class="nav-text">官网</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境配置"><span class="nav-number">2.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hook"><span class="nav-number">3.</span> <span class="nav-text">hook</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#firda-api-补全"><span class="nav-number">4.</span> <span class="nav-text">firda api 补全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它"><span class="nav-number">5.</span> <span class="nav-text">其它</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TODO"><span class="nav-number">6.</span> <span class="nav-text">TODO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例“叽里呱啦儿童英语V9-6-0”"><span class="nav-number">7.</span> <span class="nav-text">示例“叽里呱啦儿童英语V9.6.0”</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">没用的喵叔</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Mist</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'hBl4zEC0RSQ2OTNHGh7tYQJQ-gzGzoHsz',
+        appKey: '3cqoD6bwDV5yOQAInG6KpwWM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
