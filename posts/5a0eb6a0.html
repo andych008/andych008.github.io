@@ -421,10 +421,10 @@
 <li>x  </li>
 </ol>
 <h2 id="gradle相关"><a href="#gradle相关" class="headerlink" title="gradle相关"></a>gradle相关</h2><ol>
-<li>lib库自带混淆规则<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">defaultConfig &#123;</span><br><span class="line">    consumerProguardFiles &apos;proguard-rules.pro&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>lib库自带混淆规则<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">defaultConfig</span> &#123;</span><br><span class="line">    <span class="attribute">consumerProguardFiles</span> <span class="string">'proguard-rules.pro'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#-----------keep agora -------------------</span><br><span class="line">-keep class io.agora.**&#123;*;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#-----------keep agora -------------------</span></span><br><span class="line">-keep <span class="class"><span class="keyword">class</span> <span class="title">io</span>.<span class="title">agora</span>.**</span>&#123;*;&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="android上使用linux的进程间通信"><a href="#android上使用linux的进程间通信" class="headerlink" title="android上使用linux的进程间通信"></a>android上使用linux的进程间通信</h2><p>Framework笔记 | Android Framework用到了哪些IPC方式，分别在哪里用到<br><a href="https://cloud.tencent.com/developer/article/1494008" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1494008</a></p>
 <p>android也是基于linux的，所以理论上linux的IPC通信方式在android上也是可行的。<br>比如：</p>
 <ol>
@@ -570,7 +570,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

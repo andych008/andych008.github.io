@@ -398,7 +398,7 @@
 <li>用android killer修改后的apk安装到手机（要有<code>android:debuggable=&quot;true&quot;</code>）</li>
 <li>以调试模式启动<code>adb shell am start -D -n com.example.myapplication/com.example.myapplication.MainActivity</code>，app会处于等待调试的状态中。</li>
 <li><p><code>adb shell ps | findstr com.example.myapplication</code>查看pid</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">u0_a78    3813  1399  1375708 30176 futex_wait 00000000 S com.example.myapplication</span><br></pre></td></tr></table></figure>
+ <figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">u0_a78    <span class="number">3813</span>  <span class="number">1399</span>  <span class="number">1375708</span> <span class="number">30176</span> futex_wait <span class="number">00000000</span> S com.example.myapplication</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><code>adb forward tcp:8700 jdwp:3813</code> 建立端口转发</p>
 </li>
@@ -543,7 +543,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

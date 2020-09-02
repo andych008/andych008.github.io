@@ -408,12 +408,12 @@
 <h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><ol>
 <li>电脑安装<code>pip install frida-tools</code></li>
 <li><p>电脑安装，绑定：二选一就行</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install frida       # Python bindings</span><br><span class="line">npm install frida       # Node.js bindings</span><br></pre></td></tr></table></figure>
+ <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install</span> frida       <span class="comment"># Python bindings</span></span><br><span class="line">npm <span class="keyword">install</span> frida       <span class="comment"># Node.js bindings</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>下载<a href="https://github.com/frida/frida/releases" target="_blank" rel="noopener">server文件</a>(x86模拟器对应<code>frida-server-12.8.20-android-x86</code>)</p>
 </li>
 <li><p>安装server文件</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">adb shell getprop ro.product.cpu.abi#查看cpu架构</span><br><span class="line">adb root</span><br><span class="line">adb push frida-server-12.8.20-android-x86 /data/local/tmp</span><br><span class="line">cd /data/local/tmp</span><br><span class="line">mv frida-server-12.8.20-android-x86 fs</span><br><span class="line">chmod 755 fs</span><br><span class="line">adb shell -x &quot;/data/local/tmp/fs&quot;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="keyword">shell</span><span class="bash"> getprop ro.product.cpu.abi<span class="comment">#查看cpu架构</span></span></span><br><span class="line"><span class="bash">adb root</span></span><br><span class="line"><span class="bash">adb push frida-server-12.8.20-android-x86 /data/<span class="built_in">local</span>/tmp</span></span><br><span class="line"><span class="bash"><span class="built_in">cd</span> /data/<span class="built_in">local</span>/tmp</span></span><br><span class="line"><span class="bash">mv frida-server-12.8.20-android-x86 fs</span></span><br><span class="line"><span class="bash">chmod 755 fs</span></span><br><span class="line"><span class="bash">adb shell -x <span class="string">"/data/local/tmp/fs"</span></span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>测试<code>frida-ps -U</code>#列出USB设备运行中的进程，模拟器也是usb设备</p>
 </li>
@@ -422,7 +422,7 @@
 <h3 id="hook"><a href="#hook" class="headerlink" title="hook"></a>hook</h3><p>进行Hook <code>com.hookme.MainActivity#checkXp0</code>函数</p>
 <ul>
 <li><p>脚本<code>imei.js</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(function()&#123;</span><br><span class="line">    console.log(&quot;######&quot;)</span><br><span class="line"></span><br><span class="line">    var logActivity = Java.use(&quot;com.hookme.MainActivity&quot;);</span><br><span class="line">    logActivity.checkXp0.implementation = function()&#123;</span><br><span class="line">        console.log(&quot;Hook&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"######"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> logActivity = Java.use(<span class="string">"com.hookme.MainActivity"</span>);</span><br><span class="line">    logActivity.checkXp0.implementation = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"Hook"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>命令行载入脚本运行<code>frida -U com.hookme -l imei.js --no-pause --runtime=v8</code></p>
 </li>
@@ -432,21 +432,21 @@
 <h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><ol>
 <li>手机需要<strong>root</strong></li>
 <li><p>oppo r9m arm-64会失败，自动重启。但是<code>frida-server-12.8.20-android-arm</code>却可用(因为有可能对应的应用刚好是32位的)</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@R9:/ $busybox uname -a</span><br><span class="line">Linux localhost 3.10.72+ #1 SMP PREEMPT Mon Mar 14 03:03:58 CST 2016 aarch64 unknown</span><br></pre></td></tr></table></figure>
+ <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">shell</span><span class="bash">@R9:/ <span class="variable">$busybox</span> uname -a</span></span><br><span class="line"><span class="bash">Linux localhost 3.10.72+ <span class="comment">#1 SMP PREEMPT Mon Mar 14 03:03:58 CST 2016 aarch64 unknown</span></span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>然后x86 32位 api24成功，使用<code>frida-server-12.8.20-android-x86</code>。</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">generic_x86:/ # uname -a</span><br><span class="line">Linux localhost 3.10.0+ #261 SMP PREEMPT Fri May 19 12:50:09 PDT 2017 i686</span><br></pre></td></tr></table></figure>
+ <figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ge</span><span class="symbol">neric_x86</span>:/ <span class="attr"># uname -a</span></span><br><span class="line"><span class="attr">Linux localhost 3</span><span class="number">.10.</span><span class="number">0</span>+ <span class="attr">#261</span> SMP PREEMPT Fri May <span class="number">19</span> <span class="number">12</span>:<span class="number">50</span>:<span class="number">09</span> PDT <span class="number">2017</span> i<span class="number">686</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>逍遥7.1系统 ok (x86 32位)，在5.1上hook<code>onResume()</code>会失败</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">130|OPPO R11 Plus:/ # uname -m</span><br><span class="line">i686</span><br></pre></td></tr></table></figure>
+ <figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">130</span>|OPPO <span class="built_in">R11</span> Plus:/ <span class="meta"># uname -m</span></span><br><span class="line">i686</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>注意内部类的表示方式<code>var abtest = Java.use(&quot;com.adhoc.config.AdhocConfig$Builder&quot;);</code>是美元符号</p>
 </li>
-<li>逍遥、雷电为什么可以跑armeabi架构的so <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb shell getprop ro.product.cpu.abilist#查看手机支持的所有cpu架构（比如逍遥、雷电这类模拟器支持多个架构）</span><br><span class="line">[ro.product.cpu.abilist]: [x86,armeabi-v7a,armeabi] #逍遥、雷电</span><br><span class="line">[ro.product.cpu.abilist]: [x86] #android sdk 支持cpu加速的模拟器</span><br></pre></td></tr></table></figure>
+<li>逍遥、雷电为什么可以跑armeabi架构的so <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb shell getprop ro<span class="selector-class">.product</span><span class="selector-class">.cpu</span><span class="selector-class">.abilist</span>#查看手机支持的所有cpu架构（比如逍遥、雷电这类模拟器支持多个架构）</span><br><span class="line">[ro<span class="selector-class">.product</span><span class="selector-class">.cpu</span><span class="selector-class">.abilist</span>]: [x86,armeabi-v7a,armeabi] #逍遥、雷电</span><br><span class="line">[ro<span class="selector-class">.product</span><span class="selector-class">.cpu</span><span class="selector-class">.abilist</span>]: [x86] <span class="selector-id">#android</span> sdk 支持cpu加速的模拟器</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h3 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h3><ul>
-<li>Gadget(免root使用frida)<br><a href="https://www.jianshu.com/p/bab4f4714d98" target="_blank" rel="noopener">https://www.jianshu.com/p/bab4f4714d98</a><br>使用objection自动完成frida gadget注入到apk中<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip3 install -U objection</span><br><span class="line">objection patchapk -s target_app.apk</span><br></pre></td></tr></table></figure>
+<li>Gadget(免root使用frida)<br><a href="https://www.jianshu.com/p/bab4f4714d98" target="_blank" rel="noopener">https://www.jianshu.com/p/bab4f4714d98</a><br>使用objection自动完成frida gadget注入到apk中<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip3 <span class="keyword">install</span> -U objection</span><br><span class="line">objection patchapk -s target_app.apk</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="示例“叽里呱啦儿童英语V9-6-0”"><a href="#示例“叽里呱啦儿童英语V9-6-0”" class="headerlink" title="示例“叽里呱啦儿童英语V9.6.0”"></a>示例“叽里呱啦儿童英语V9.6.0”</h3><p><a href="https://github.com/andych008/jiliguala_frida" target="_blank" rel="noopener">脚本源码</a></p>
@@ -580,7 +580,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
