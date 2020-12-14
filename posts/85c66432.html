@@ -112,7 +112,7 @@
 <meta property="og:site_name" content="老喵备忘录">
 <meta property="og:description" content="不会写脚本的Android程序员不是好的理发师！ 头都秃了，理毛啊！">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-09-02T08:44:15.745Z">
+<meta property="og:updated_time" content="2020-12-14T01:24:34.935Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shell编程常用代码片断">
 <meta name="twitter:description" content="不会写脚本的Android程序员不是好的理发师！ 头都秃了，理毛啊！">
@@ -347,7 +347,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-02 16:44:15" itemprop="dateModified" datetime="2020-09-02T16:44:15+08:00">2020-09-02</time>
+                <time title="修改时间：2020-12-14 09:24:34" itemprop="dateModified" datetime="2020-12-14T09:24:34+08:00">2020-12-14</time>
               
             
           </span>
@@ -393,6 +393,10 @@
         <p>不会写脚本的Android程序员不是好的理发师！</p>
 <p>头都秃了，理毛啊！</p>
 <a id="more"></a> 
+<ul>
+<li><a href="./7f7fd4f0.html">bat编程常用代码片断</a></li>
+</ul>
+<hr>
 <h2 id="获取时间1"><a href="#获取时间1" class="headerlink" title="获取时间1"></a>获取时间1</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#定义一个function，通过echo返回字符串</span></span><br><span class="line"><span class="function"><span class="title">get_datetime</span></span>() &#123;</span><br><span class="line">    DATETIME=$(date <span class="string">"+%H:%M:%S"</span>)</span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$DATETIME</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#以下两句效果等价</span></span><br><span class="line">cur=`get_datetime`</span><br><span class="line">cur1=$(get_datetime)</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出示例 06:58:01</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$cur</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$cur1</span></span><br></pre></td></tr></table></figure>
 <h2 id="获取时间2"><a href="#获取时间2" class="headerlink" title="获取时间2"></a>获取时间2</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#输出 2020.08.22_22.35.27</span></span><br><span class="line">cur=`date <span class="string">'+%Y.%m.%d_%H.%M.%S'</span>`</span><br></pre></td></tr></table></figure>
 <h2 id="定义数组1"><a href="#定义数组1" class="headerlink" title="定义数组1"></a>定义数组1</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#https://www.linuxjournal.com/content/bash-arrays</span></span><br><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line">arr=(<span class="string">"Hello"</span> <span class="string">"World"</span>)</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;arr[0]&#125;</span> <span class="variable">$&#123;arr[1]&#125;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$arr</span> <span class="comment">#只会把第一个元素打印出来</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 迭代数组元素</span></span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> <span class="variable">$&#123;arr[@]&#125;</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"<span class="variable">$item</span>"</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 数组长度</span></span><br><span class="line"><span class="comment"># outputs: Array size: 2</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Array size: <span class="variable">$&#123;#arr[@]&#125;</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 数组索引</span></span><br><span class="line"><span class="comment"># outputs: the index: 0 1</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"the index: <span class="variable">$&#123;!arr[@]&#125;</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用uset删除指定索引元素</span></span><br><span class="line"><span class="built_in">unset</span> -v arr[0]</span><br><span class="line"><span class="comment"># outputs: the index: 1</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"the index: <span class="variable">$&#123;!arr[@]&#125;</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 当有一些元素从数组被删除时，可以使用下面方法重排索引，或者你不知道索引是否存在时隙时会有用。</span></span><br><span class="line">arr=(<span class="variable">$&#123;arr[@]&#125;</span>)</span><br><span class="line"><span class="comment"># outputs: the index: 0</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"the index: <span class="variable">$&#123;!arr[@]&#125;</span>"</span></span><br></pre></td></tr></table></figure>
@@ -523,7 +527,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
