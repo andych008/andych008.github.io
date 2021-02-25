@@ -104,27 +104,34 @@
 
 
 
-  <meta name="description" content="把logcat日志实时显示到电脑浏览器上，是不是很酷！">
-<meta name="keywords" content="android,websocket">
+  <meta name="description" content="之前写过一篇 程序员怎么做“竞品分析”：抓包工具的使用。如果不实践，这些内容在网上都能查到，但是自己尝试往往会失败。刚好昨天帮朋友解决一个小问题，抓包一款应用：http://app.xiaomi.com/detail/1295834。">
+<meta name="keywords" content="android,crack">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android RemoteLog(远程查看日志)">
-<meta property="og:url" content="http://yoursite.com/posts/571c1dd7.html">
+<meta property="og:title" content="记录一次app抓包实践">
+<meta property="og:url" content="http://yoursite.com/posts/e18504ad.html">
 <meta property="og:site_name" content="老喵备忘录">
-<meta property="og:description" content="把logcat日志实时显示到电脑浏览器上，是不是很酷！">
+<meta property="og:description" content="之前写过一篇 程序员怎么做“竞品分析”：抓包工具的使用。如果不实践，这些内容在网上都能查到，但是自己尝试往往会失败。刚好昨天帮朋友解决一个小问题，抓包一款应用：http://app.xiaomi.com/detail/1295834。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/rlog01.png">
-<meta property="og:updated_time" content="2020-06-03T07:08:02.664Z">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_01.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_02.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_03.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_04.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_05.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_06.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_07.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_08.jpg">
+<meta property="og:updated_time" content="2021-02-25T11:30:58.732Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android RemoteLog(远程查看日志)">
-<meta name="twitter:description" content="把logcat日志实时显示到电脑浏览器上，是不是很酷！">
-<meta name="twitter:image" content="https://gitee.com/andych008/pic/raw/master/img/rlog01.png">
+<meta name="twitter:title" content="记录一次app抓包实践">
+<meta name="twitter:description" content="之前写过一篇 程序员怎么做“竞品分析”：抓包工具的使用。如果不实践，这些内容在网上都能查到，但是自己尝试往往会失败。刚好昨天帮朋友解决一个小问题，抓包一款应用：http://app.xiaomi.com/detail/1295834。">
+<meta name="twitter:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_01.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/posts/571c1dd7.html">
+  <link rel="canonical" href="http://yoursite.com/posts/e18504ad.html">
 
 
 
@@ -134,7 +141,7 @@
   };
 </script>
 
-  <title>Android RemoteLog(远程查看日志) | 老喵备忘录</title>
+  <title>记录一次app抓包实践 | 老喵备忘录</title>
   
 
 
@@ -289,7 +296,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/571c1dd7.html">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/e18504ad.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="没用的喵叔">
@@ -306,7 +313,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Android RemoteLog(远程查看日志)
+          <h2 class="post-title" itemprop="name headline">记录一次app抓包实践
               
             
           </h2>
@@ -332,24 +339,12 @@
                 
               
 
-              <time title="创建时间：2018-12-01 11:56:31" itemprop="dateCreated datePublished" datetime="2018-12-01T11:56:31+08:00">2018-12-01</time>
+              <time title="创建时间：2021-02-25 16:07:19 / 修改时间：19:30:58" itemprop="dateCreated datePublished" datetime="2021-02-25T16:07:19+08:00">2021-02-25</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-06-03 15:08:02" itemprop="dateModified" datetime="2020-06-03T15:08:02+08:00">2020-06-03</time>
               
             
           </span>
@@ -363,8 +358,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/571c1dd7.html#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/posts/571c1dd7.html" itemprop="commentCount"></span>
+                <a href="/posts/e18504ad.html#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/posts/e18504ad.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -392,57 +387,27 @@
       
 
       
-        <p>把logcat日志实时显示到电脑浏览器上，是不是很酷！</p>
+        <p>之前写过一篇 <a href="https://unclecat.wang/posts/e5c1321e.html" target="_blank" rel="noopener">程序员怎么做“竞品分析”：抓包工具的使用</a>。如果不实践，这些内容在网上都能查到，但是自己尝试往往会失败。刚好昨天帮朋友解决一个小问题，抓包一款应用：<a href="http://app.xiaomi.com/detail/1295834。" target="_blank" rel="noopener">http://app.xiaomi.com/detail/1295834。</a></p>
 <a id="more"></a> 
-<hr>
-<p>做Android开发，如果不能插着usb，看着logcat。你会觉得少一只手一样很不方便。</p>
-<p>但是现实中确实有这种情况，比如本人在做的hud（汽车上用的“抬头显示”）项目是通过usb线把手机上的数据投到hud设备上（这样我们就不能用usb口连接adb查看logcat了）。首先我们想到的是把日志写文件，再把usb线插在电脑上，pull出日志，再分析日志。这效率，可想而知。。。往往我们希望可以连着手机看logcat的日志，今天我们聊聊有哪些方案，以及哪个方案更适合你。</p>
-<p>想了解hud的，见这里，顺便给我们公司的产品打个广告：<br><a href="https://item.jd.com/36099441969.html" target="_blank" rel="noopener">车萝卜 智能车机导航 HUD抬头显示 智能语音手机支架 安全预测仪 青春版+车小蜜（灰）</a></p>
-<hr>
-<h2 id="方案一-无线连接adb"><a href="#方案一-无线连接adb" class="headerlink" title="方案一(无线连接adb)"></a>方案一(无线连接adb)</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb tcpip <span class="number">5555</span> （端口号）</span><br><span class="line">adb connect <span class="number">192.168</span><span class="number">.1</span><span class="number">.199</span> （Android设备IP地址）</span><br><span class="line">adb usb 使用回usb调试</span><br></pre></td></tr></table></figure>
-<p>这种方案，就三个字：“不方便”！要经常切换。而且不稳定，经常断线，不知道原因。</p>
-<h2 id="方案二RemoteLogcatViewer"><a href="#方案二RemoteLogcatViewer" class="headerlink" title="方案二RemoteLogcatViewer"></a>方案二<a href="https://github.com/8enet/RemoteLogcatViewer" target="_blank" rel="noopener">RemoteLogcatViewer</a></h2><p>最初，当我在网上找到了这个方案，简单高兴得要哭了。</p>
-<p>只要手机和你的电脑在同一个局域网网段，就可以无线实时地查看手机上的logcat日志。这个方案的技术实现也比较好理解，在手机里建立websocket server（以下都用ws server代替），电脑上通过ws client连接来查看。</p>
-<p>而且，如果不希望修改现有项目，可以新建一个其他的项目依赖本库，然后通过配置相同的 android:sharedUserId=”” 和签名相同， 可以在新app运行时中读取所有sharedUserId相同的 log。这个feature简直是锦上添花！完美！</p>
-<p>但是用过之后。我遇到了三个问题:</p>
-<ol>
-<li>加上sharedUserId之后，不能覆盖安装。</li>
-<li>连接老是断开。也许，我要做app要保活？太忙了，没时间尝试。</li>
-<li>和领导提过这个方案。他也觉得很赞，问我如果用户的手机上遇到bug，能不能实时看到他的日志。显然，这个方案不太好实现这个功能。因为server的实现在手机上。</li>
-</ol>
-<p>所以，最后我只在自己的demo里用这套方案，并且，做了一些小的修改，见我的fork <a href="https://github.com/andych008/RemoteLogcatViewer" target="_blank" rel="noopener">RemoteLogcatViewer forked by 本喵</a></p>
-<h2 id="方案三（今天重点要说的，灵感来源于RemoteLogcatViewer）"><a href="#方案三（今天重点要说的，灵感来源于RemoteLogcatViewer）" class="headerlink" title="方案三（今天重点要说的，灵感来源于RemoteLogcatViewer）"></a>方案三（今天重点要说的，灵感来源于RemoteLogcatViewer）</h2><p>Demo及代码实现见这里<a href="https://github.com/andych008/RemoteLogDemo" target="_blank" rel="noopener">RemoteLogDemo</a></p>
-<p>本方案的server端可以在外网服务器上，也可以是同局域网内的一台电脑。<br>配合<a href="https://github.com/andych008/log-client" target="_blank" rel="noopener">log-client</a>、<a href="https://github.com/andych008/log-server" target="_blank" rel="noopener">log-server</a>一起使用。</p>
-<ul>
-<li><p>数据流大概是这样的<code>logcat --&gt; log-server --&gt; log-client</code>。</p>
-<ol>
-<li>app跑着ws client，负责把自己的logcat日志发给log-server。</li>
-<li>log-server是部署在服务器上，跑着ws server，负责将app上logcat的日志，转发到log-client</li>
-<li><p>log-client运行在开发者的电脑上，也跑着ws client，负责查看日志。</p>
-<p>log-server、log-client都是nodejs来实现的。app的ws使用ok-http来实现。</p>
-</li>
-</ol>
-</li>
-<li><p>使用方法</p>
-<ol>
-<li>先运行log-server 。如果部署在外网会比较方便，可以一直开着。</li>
-<li>打开log-client，输入要过滤的字符串（ 正则表达式过滤）。</li>
-<li><p>打开app，可以像我的demo一样程序启动就连接ws-server(记得加上BuildConfig.DEBUG)。如果是release版本，最好把该功能隐藏，可以通过后门开启。</p>
-<p>android app中执行<code>Log.i(TAG, System.currentTimeMillis() + &quot;&quot;);</code></p>
-<p>log-client可以看到相应的输出<br><img src="https://gitee.com/andych008/pic/raw/master/img/rlog01.png" alt="此处输入图片的描述"></p>
-</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li>ps:如果你没有服务器，而且想把log-server部署 在外网。可以使用<a href="https://leancloud.cn" target="_blank" rel="noopener">leancloud</a>的服务，有免费版本。代码见<a href="https://github.com/andych008/wslog" target="_blank" rel="noopener">wslog</a>。详细的使用方法，见官方文档。</li>
-</ul>
-<ul>
-<li>todo list<ol>
-<li>日志写文件</li>
-</ol>
-</li>
-</ul>
+<h3 id="先上截图："><a href="#先上截图：" class="headerlink" title="先上截图："></a>先上截图：</h3><p> <img src="https://gitee.com/andych008/pic/raw/master/img/proxy_01.jpg" width="400"></p>
+<p>看到toast提示了吧？<strong>“请关闭代理，在尝试”</strong>。本来我们设置好代理，用charles抓包。却看到了这个。貌似不知道怎么继续下去了。请跟我往下看，到最后大家会发现多数应用都有很多漏洞，我们很轻松地就可以利用这些漏洞。</p>
+<h3 id="突破口"><a href="#突破口" class="headerlink" title="突破口"></a>突破口</h3><p>hack的第一步，往往是先找突破口。突破口找得准，破解一个app就是分分钟的事情。</p>
+<p>突破口有很多，比如最常见的就是字符串。软件注册，会提示“注册成功”，防代理，会提示类似上图的内容。</p>
+<p>反编译一下，只要有工具，反编译其实就是点几下鼠标的事情。用<a href="https://github.com/skylot/jadx/releases" target="_blank" rel="noopener">jadx-gui-1.2.0-no-jre-win.exe</a>打开apk，</p>
+<p>搜索文本，跳转<br><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_02.jpg" alt></p>
+<p>如下图，HTTPCaller是个http请求的工具类，其中<code>boolean checkAgent()</code>判断是否有代理。而且如果MLog.debug这个开关为true，就会跳过判断（貌似我们都爱这样写代码//此处有狗头）。如果把这个值改成true，就是所谓的debug模式了。<br><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_03.jpg" alt></p>
+<p>如下图，查找<code>MLog.debug</code>的用例</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_04.jpg" alt></p>
+<p>如下图，查找MLog.debug的用例结果页，只有一处是写操作</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_05.jpg" alt></p>
+<p>如下图，查找<code>setDebug</code>的用例</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_06.jpg" alt></p>
+<p>如下图，这个开关是从sp中读取，继续查找<code>CoreConst.CORE_LIB_DEBUG_KEY</code>的用例</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_07.jpg" alt></p>
+<p>如下图，连续点击某个控件10次以上来修改开关。再继续查找<code>OnLogSwitchClickListener</code>的用例，我们找到是webActivity的标题设置了这个点击事件。所以从这个app里找一个web页，比如“用户协议”页面。</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_08.jpg" alt></p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>这个app有调试开关，打开app，我的-&gt;设置-&gt;关于-&gt;用户协议。然后连续点击标题“用户协议”10次以上，会toast提示“已开启调试模式”。这时就可以抓包了。</p>
+<p>而且继续跟代码，会发现logcat里还有http日志，logcat的 tag就是http。所以，对于程序员们，<strong>调试开关</strong>不能乱加！不然太容易被利用了。</p>
 
       
     </div>
@@ -465,7 +430,7 @@
           
             <a href="/tags/android/" rel="tag"># android</a>
           
-            <a href="/tags/websocket/" rel="tag"># websocket</a>
+            <a href="/tags/crack/" rel="tag"># crack</a>
           
         </div>
       
@@ -478,8 +443,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/5a0eb6a0.html" rel="next" title="todo">
-                <i class="fa fa-chevron-left"></i> todo
+              <a href="/posts/976ae893.html" rel="next" title="OkHttp系列:自动获取access_token">
+                <i class="fa fa-chevron-left"></i> OkHttp系列:自动获取access_token
               </a>
             
           </div>
@@ -487,10 +452,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/b122bd08.html" rel="prev" title="Android项目分仓后引用aar或引用源码的切换">
-                Android项目分仓后引用aar或引用源码的切换 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -648,7 +609,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#方案一-无线连接adb"><span class="nav-number">1.</span> <span class="nav-text">方案一(无线连接adb)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案二RemoteLogcatViewer"><span class="nav-number">2.</span> <span class="nav-text">方案二RemoteLogcatViewer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案三（今天重点要说的，灵感来源于RemoteLogcatViewer）"><span class="nav-number">3.</span> <span class="nav-text">方案三（今天重点要说的，灵感来源于RemoteLogcatViewer）</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#先上截图："><span class="nav-number">1.</span> <span class="nav-text">先上截图：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#突破口"><span class="nav-number">2.</span> <span class="nav-text">突破口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a></li></ol></div>
             
 
           </div>
