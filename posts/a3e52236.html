@@ -104,18 +104,18 @@
 
 
 
-  <meta name="description" content="本文基于https://gitee.com/isrc_ohos/timber_ohos 分析timber的源码，及移植到鸿蒙需要做的工作。">
+  <meta name="description" content="本文基于https://gitee.com/andych008/timber_ohos 分析Timber的源码，及移植到鸿蒙需要做的工作。">
 <meta name="keywords" content="ohos">
 <meta property="og:type" content="article">
 <meta property="og:title" content="安卓to鸿蒙系列：Timber">
 <meta property="og:url" content="http://yoursite.com/posts/a3e52236.html">
 <meta property="og:site_name" content="老喵备忘录">
-<meta property="og:description" content="本文基于https://gitee.com/isrc_ohos/timber_ohos 分析timber的源码，及移植到鸿蒙需要做的工作。">
+<meta property="og:description" content="本文基于https://gitee.com/andych008/timber_ohos 分析Timber的源码，及移植到鸿蒙需要做的工作。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-04-23T11:26:05.675Z">
+<meta property="og:updated_time" content="2021-04-23T11:50:28.845Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="安卓to鸿蒙系列：Timber">
-<meta name="twitter:description" content="本文基于https://gitee.com/isrc_ohos/timber_ohos 分析timber的源码，及移植到鸿蒙需要做的工作。">
+<meta name="twitter:description" content="本文基于https://gitee.com/andych008/timber_ohos 分析Timber的源码，及移植到鸿蒙需要做的工作。">
 
 
 
@@ -330,7 +330,7 @@
                 
               
 
-              <time title="创建时间：2021-04-23 15:37:18 / 修改时间：19:26:05" itemprop="dateCreated datePublished" datetime="2021-04-23T15:37:18+08:00">2021-04-23</time>
+              <time title="创建时间：2021-04-23 15:37:18 / 修改时间：19:50:28" itemprop="dateCreated datePublished" datetime="2021-04-23T15:37:18+08:00">2021-04-23</time>
             
 
             
@@ -378,9 +378,9 @@
       
 
       
-        <p>本文基于<a href="https://gitee.com/isrc_ohos/timber_ohos" target="_blank" rel="noopener">https://gitee.com/isrc_ohos/timber_ohos</a> 分析timber的源码，及移植到鸿蒙需要做的工作。</p>
+        <p>本文基于<a href="https://gitee.com/andych008/timber_ohos" target="_blank" rel="noopener">https://gitee.com/andych008/timber_ohos</a> 分析Timber的源码，及移植到鸿蒙需要做的工作。</p>
 <a id="more"></a> 
-<p>大神JakeWharton的<a href="https://github.com/JakeWharton/timber" target="_blank" rel="noopener">timber</a>是我写日志的最爱，几乎在所有的项目中都用。当然一般我会通过Timber使用<a href="https://github.com/orhanobut/logger" target="_blank" rel="noopener">Logger</a>，原因很简单，因为Timber接口简洁，Logger的输出样式好看。常规套路：</p>
+<p>大神JakeWharton的<a href="https://github.com/JakeWharton/timber" target="_blank" rel="noopener">Timber</a>是我写日志的最爱，几乎在所有的项目中都用。当然一般我会通过Timber使用<a href="https://github.com/orhanobut/logger" target="_blank" rel="noopener">Logger</a>，原因很简单，因为Timber接口简洁，Logger的输出样式好看。常规套路：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()</span><br><span class="line">        .tag(<span class="string">"DwGG"</span>)   <span class="comment">// (Optional) Global tag for every log. Default PRETTY_LOGGER</span></span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">Logger.addLogAdapter(<span class="keyword">new</span> AndroidLogAdapter(formatStrategy));</span><br><span class="line">Timber.plant(<span class="keyword">new</span> Timber.DebugTree() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">log</span><span class="params">(<span class="keyword">int</span> priority, String tag, String message, Throwable t)</span> </span>&#123;</span><br><span class="line">        Logger.log(priority, tag, message, t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>当然它的内部实现也一样完美。咱们往下看。</p>
 <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p><strong>Timber</strong>英文翻译为<strong>“木材”</strong>。静态方法<code>Timber.plant(Tree tree)</code>即种树。每种一棵树，就拥有一种日志能力。</p>
