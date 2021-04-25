@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=6.5.0">
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文基于https://gitee.com/openharmony-tpc/logger 分析Logger的源码，及移植到鸿蒙需要做的工作。">
+<meta name="keywords" content="ohos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓to鸿蒙系列：Logger">
+<meta property="og:url" content="http://yoursite.com/posts/aa5675ef.html">
+<meta property="og:site_name" content="老喵备忘录">
+<meta property="og:description" content="本文基于https://gitee.com/openharmony-tpc/logger 分析Logger的源码，及移植到鸿蒙需要做的工作。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/ohos/logger_how_it_works.png">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/ohos/logger.jpg">
+<meta property="og:updated_time" content="2021-04-25T00:29:51.429Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓to鸿蒙系列：Logger">
+<meta name="twitter:description" content="本文基于https://gitee.com/openharmony-tpc/logger 分析Logger的源码，及移植到鸿蒙需要做的工作。">
+<meta name="twitter:image" content="https://gitee.com/andych008/pic/raw/master/img/ohos/logger_how_it_works.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/posts/aa5675ef.html">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>安卓to鸿蒙系列：Logger | 老喵备忘录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">老喵备忘录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/aa5675ef.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="没用的喵叔">
+      <meta itemprop="description" content="人老了爱忘，所以记下来">
+      <meta itemprop="image" content="/images/1075578.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="老喵备忘录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">安卓to鸿蒙系列：Logger
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-04-25 08:11:08 / 修改时间：08:29:51" itemprop="dateCreated datePublished" datetime="2021-04-25T08:11:08+08:00">2021-04-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/aa5675ef.html#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/posts/aa5675ef.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文基于<a href="https://gitee.com/openharmony-tpc/logger" target="_blank" rel="noopener">https://gitee.com/openharmony-tpc/logger</a> 分析<a href="https://github.com/orhanobut/logger" target="_blank" rel="noopener">Logger</a>的源码，及移植到鸿蒙需要做的工作。</p>
+<a id="more"></a> 
+<p>在<a href="https://unclecat.wang/posts/a3e52236.html" target="_blank" rel="noopener">安卓to鸿蒙系列：Timber</a> 里我就已经提到，我喜欢Logger和Timber一起使用。原因很简单，因为Timber接口简洁，Logger的输出样式好看。</p>
+<p>常规套路：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()</span><br><span class="line">        .tag(<span class="string">"DwGG"</span>)   <span class="comment">// (Optional) Global tag for every log. Default PRETTY_LOGGER</span></span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">Logger.addLogAdapter(<span class="keyword">new</span> AndroidLogAdapter(formatStrategy));</span><br><span class="line">Timber.plant(<span class="keyword">new</span> Timber.DebugTree() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">log</span><span class="params">(<span class="keyword">int</span> priority, String tag, String message, Throwable t)</span> </span>&#123;</span><br><span class="line">        Logger.log(priority, tag, message, t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Logger源码分析"><a href="#Logger源码分析" class="headerlink" title="Logger源码分析"></a>Logger源码分析</h3><p><strong>Timber</strong>只有一个文件，600多行代码，<strong>Logger</strong>相对复杂一些，不过结构也一样简单，很容易读懂源码。和Timber一样，Logger的扩展性也一样优秀。</p>
+<p>Timber内置了DebugTree(在控制台输出日志)。Logger内置了<code>AndroidLogAdapter</code>（控制台输出）、<code>DiskLogAdapter</code>（输出日志到本地磁盘）</p>
+<p>先看图，有一个整体的认识：</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/ohos/logger_how_it_works.png" alt></p>
+<p>解释一下上面的图：</p>
+<ol>
+<li><p><strong><u>Logger</u></strong> 也使用了 <strong>委托(delegate)模式</strong>，Logger把所以的操作都委托给了<code>Printer printer</code></p>
+</li>
+<li><p><strong><u>Printer</u></strong> 是日志能力的抽像（即，定义了日志工具的api），类似于Timber中的Tree。定义的api有：</p>
+<ul>
+<li><p>日志相关api：<code>v()</code>、<code>d()</code>、<code>i()</code>、<code>e()</code>、<code>wtf()</code>，以及<code>xml()</code>、<code>json()</code>对xml、json数据格式的支持。</p>
+</li>
+<li><p>设置临时tag：<code>t()</code></p>
+</li>
+<li><p>LogAdapter相关api：<code>addAdapter(LogAdapter adapter)</code>、<code>clearLogAdapters()</code></p>
+</li>
+</ul>
+<blockquote>
+<p><code>Printer</code>的默认实现是<code>LoggerPrinter</code>，我们可以自定义自己的实现。不过，多数情况下貌似没必要。</p>
+</blockquote>
+</li>
+<li><p>与Timber相比，Logger对Timber中的Tree进一步抽像。以 <strong><u>LogAdapter</u></strong> 适配不同的日志能力，如Android控制台输出（<code>AndroidLogAdapter</code>）、保存到磁盘（<code>DiskLogAdapter</code>）。</p>
+<blockquote>
+<p>从类名上，我们也能看出用了<strong>适配器(apapter)模式</strong></p>
+<p>当然我们也可以定义<strong>鸿蒙HiLog</strong>控制台输出的LogAdapter（取个名字：<code>HarmonyLogAdapter</code>）</p>
+</blockquote>
+</li>
+<li><p><strong><u>FormatStrategy</u></strong> 格式化原始数据，决定了LogAdapter输出日志的样式。</p>
+<blockquote>
+<p><code>AndroidLogAdapter</code>中的默认实现是<code>PrettyFormatStrategy</code>（可以显示线程信息、统一的tag:<code>&quot;PRETTY_LOGGER&quot;</code>、线程栈）；</p>
+<p><code>DiskLogAdapter</code>中的默认实现是<code>CsvFormatStrategy</code>（csv文件的格式）；</p>
+</blockquote>
+</li>
+<li><p><strong><u>LogStrategy</u></strong> 最终决定FormatStrategy输出日志的目标（如：控制台<code>LogcatLogStrategy</code>、磁盘<code>DiskLogStrategy</code>）</p>
+</li>
+</ol>
+<p>更详细的分析请移步：<a href="https://blog.csdn.net/chenqianleo/article/details/77655986" target="_blank" rel="noopener">Android日志系统第三方库——Logger 源码分析</a> </p>
+<h3 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h3><ol>
+<li><p>临时tag的实现方法</p>
+<blockquote>
+<p>很简单，<code>Logger.t(&quot;临时tag&quot;).d(xxx);</code>设置临时tag。使用一次就删除。最终也是委托给Printer来实现。</p>
+<p>为了性能，<code>LoggerPrinter</code>和<code>Timber</code>一样，也使用<code>ThreadLocal</code>以空间换时间。</p>
+</blockquote>
+</li>
+<li><p>多线程支持方面，只有<code>LoggerPrinter</code>的<code>synchronized void log()</code>加了锁。</p>
+<blockquote>
+<p>个人认为，应该把<code>LoggerPrinter</code>的<code>addAdapter(LogAdapter adapter)</code>和<code>clearLogAdapters()</code>都加上锁。</p>
+<p><strong><u>因为log()方法加锁，所以一定要保证此方法的执行效率。</u></strong> 不然，如果一个线程写日志太耗时，会影响其它线程的执行。</p>
+</blockquote>
+</li>
+<li><p>接上一条，<code>DiskLogStrategy</code>在写文件时，在独立的HandlerThread线程中执行，可以保证<code>LoggerPrinter</code>的<code>void log()</code>方法的执行时间。</p>
+</li>
+</ol>
+<h3 id="移植到鸿蒙"><a href="#移植到鸿蒙" class="headerlink" title="移植到鸿蒙"></a>移植到鸿蒙</h3><p>通过上面的分析，我们可以知道，移植到鸿蒙需要的工作有：</p>
+<ol>
+<li><p>实现<code>HarmonyLogAdapter</code>提供 <strong><u>控制台输出</u></strong> 的能力，其中<code>PrettyFormatStrategy</code>基本可以复用，只要修改<code>LogcatLogStrategy</code>的实现，用<code>HiLog</code>替换<code>android.util.Log</code>相关的操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> PrettyFormatStrategy <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (logStrategy == <span class="keyword">null</span>) &#123;</span><br><span class="line">    logStrategy = <span class="keyword">new</span> LogcatLogStrategy();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> PrettyFormatStrategy(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改<code>DiskLogAdapter</code>提供 <u><strong>输出日志到文件</strong></u> 的能力。其中<code>CsvFormatStrategy</code>基本可以复用，只要修改日志文件路径的设置以及<code>Handler</code>相关的类。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String diskPath = Environment.getExternalStorageDirectory().getAbsolutePath();</span><br><span class="line">String folder = diskPath + File.separatorChar + <span class="string">"logger"</span>;</span><br><span class="line">HandlerThread ht = <span class="keyword">new</span> HandlerThread(<span class="string">"AndroidFileLogger."</span> + folder);</span><br><span class="line">ht.start();</span><br><span class="line">Handler handler = <span class="keyword">new</span> DiskLogStrategy.WriteHandler(ht.getLooper(), folder, MAX_BYTES);</span><br></pre></td></tr></table></figure>
+<p> 修改为：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String folder = <span class="string">"/storage/emulated/0/"</span> + File.separatorChar + <span class="string">"logger"</span>;</span><br><span class="line">String newThreadName = <span class="string">"FileLogger"</span> + folder;</span><br><span class="line">EventRunner ht = EventRunner.create(newThreadName);</span><br><span class="line">EventHandler handler = <span class="keyword">new</span> DiskLogStrategy.WriteHandler(ht, folder, MAX_BYTES);</span><br></pre></td></tr></table></figure>
+<p> 同理<code>DiskLogStrategy</code>里的<code>Handler</code>也要改为<code>EventHandler</code>。</p>
+</li>
+</ol>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p><img src="https://gitee.com/andych008/pic/raw/master/img/ohos/logger.jpg" alt></p>
+<p>上图是最终的效果。从代码中可以看到HiLogLabel是固定的，所以<code>domain</code>和<code>tag</code>都是固定的。而为了实现自定义tag的目的，把自定义tag输出到了message里，所以我们可以看到两个”PRETTY_LOGGER”，视觉上不太完美。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogcatLogStrategy</span> <span class="keyword">implements</span> <span class="title">LogStrategy</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> String DEFAULT_TAG = <span class="string">"NO_TAG"</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> String TAG_LOG = <span class="string">"[PRETTY_LOGGER] "</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DOMAIN_ID = <span class="number">0xD000F00</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> HiLogLabel LABEL_LOG = <span class="keyword">new</span> HiLogLabel(<span class="number">3</span>, DOMAIN_ID, TAG_LOG);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>优化的方法可以参考 <a href="https://gitee.com/andych008/timber_ohos" target="_blank" rel="noopener">Timber_ohos</a>的实现</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ohos/" rel="tag"># ohos</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/a3e52236.html" rel="next" title="安卓to鸿蒙系列：Timber">
+                <i class="fa fa-chevron-left"></i> 安卓to鸿蒙系列：Timber
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/1075578.gif" alt="没用的喵叔">
+            
+              <p class="site-author-name" itemprop="name">没用的喵叔</p>
+              <p class="site-description motion-element" itemprop="description">人老了爱忘，所以记下来</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/andych008" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:andych008@163.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Logger源码分析"><span class="nav-number">1.</span> <span class="nav-text">Logger源码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#知识点"><span class="nav-number">2.</span> <span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移植到鸿蒙"><span class="nav-number">3.</span> <span class="nav-text">移植到鸿蒙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考"><span class="nav-number">4.</span> <span class="nav-text">思考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">没用的喵叔</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Mist</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'hBl4zEC0RSQ2OTNHGh7tYQJQ-gzGzoHsz',
+        appKey: '3cqoD6bwDV5yOQAInG6KpwWM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
