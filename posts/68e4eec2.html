@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=6.5.0">
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文是关于ButterKnife的移植的第一篇： 先介绍基础知识，理解apt是什么，最终输出一个乞丐版BufferKnife注入工具。 这是读懂BufferKnife源码的基础。 第二篇占坑：具体讲解BufferKnife的移植。">
+<meta name="keywords" content="ohos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓to鸿蒙系列：ButterKnife(一)">
+<meta property="og:url" content="http://yoursite.com/posts/68e4eec2.html">
+<meta property="og:site_name" content="老喵备忘录">
+<meta property="og:description" content="本文是关于ButterKnife的移植的第一篇： 先介绍基础知识，理解apt是什么，最终输出一个乞丐版BufferKnife注入工具。 这是读懂BufferKnife源码的基础。 第二篇占坑：具体讲解BufferKnife的移植。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/AOP_1.png">
+<meta property="og:updated_time" content="2021-04-30T12:10:41.008Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓to鸿蒙系列：ButterKnife(一)">
+<meta name="twitter:description" content="本文是关于ButterKnife的移植的第一篇： 先介绍基础知识，理解apt是什么，最终输出一个乞丐版BufferKnife注入工具。 这是读懂BufferKnife源码的基础。 第二篇占坑：具体讲解BufferKnife的移植。">
+<meta name="twitter:image" content="https://gitee.com/andych008/pic/raw/master/img/AOP_1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/posts/68e4eec2.html">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>安卓to鸿蒙系列：ButterKnife(一) | 老喵备忘录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">老喵备忘录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/posts/68e4eec2.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="没用的喵叔">
+      <meta itemprop="description" content="人老了爱忘，所以记下来">
+      <meta itemprop="image" content="/images/1075578.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="老喵备忘录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">安卓to鸿蒙系列：ButterKnife(一)
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-04-30 20:09:01 / 修改时间：20:10:41" itemprop="dateCreated datePublished" datetime="2021-04-30T20:09:01+08:00">2021-04-30</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/68e4eec2.html#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/posts/68e4eec2.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文是关于ButterKnife的移植的第一篇：</p>
+<p>先介绍基础知识，理解apt是什么，最终输出一个乞丐版BufferKnife注入工具。</p>
+<p>这是读懂BufferKnife源码的基础。</p>
+<p><strong>第二篇占坑</strong>：具体讲解BufferKnife的移植。</p>
+<h2 id><a href="#" class="headerlink" title=" "></a><a id="more"></a> </h2><h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><h3 id="apt技术的实际应用："><a href="#apt技术的实际应用：" class="headerlink" title="apt技术的实际应用："></a>apt技术的实际应用：</h3><ul>
+<li><p>Android Databinding绑定view</p>
+</li>
+<li><p>ButterKnife绑定view</p>
+</li>
+<li><p>Dagger2注入变量</p>
+</li>
+<li><p>ARouter生成路由表</p>
+</li>
+</ul>
+<p>真的好多，很重要。apt就是生产力工具！</p>
+<h3 id="什么是apt？"><a href="#什么是apt？" class="headerlink" title="什么是apt？"></a>什么是apt？</h3><p>通俗讲：apt就是javac对外开放的一个插件，使javac在编译期间获取注解(Annotation)，并做出相应的处理(多数都是生成一些java代码)。</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/AOP_1.png" alt></p>
+<p>从上图可以看出apt处理的是 <strong>java源文件</strong> ，在<strong>编译期</strong>介入。</p>
+<p>与之对比的是asm之类的工具，处理的是字节码文件，在编译后期介入。</p>
+<h3 id="apt与javac的约定"><a href="#apt与javac的约定" class="headerlink" title="apt与javac的约定"></a>apt与javac的约定</h3><p>apt与javac约定在<code>META-INF/services/javax.annotation.processing.Processor</code>文件中注册apt插件。这样apt就参与到javac的编译过程中了。</p>
+<h2 id="写一个乞丐版BufferKnife"><a href="#写一个乞丐版BufferKnife" class="headerlink" title="写一个乞丐版BufferKnife"></a>写一个乞丐版BufferKnife</h2><p>不想看文字，直接看源码，点击 <a href="https://gitee.com/andych008/aptDemo" target="_blank" rel="noopener">https://gitee.com/andych008/aptDemo</a></p>
+<p>初始代码fork自 <a href="https://github.com/LiMubai2017/aptDemo，先对作者表示感谢。" target="_blank" rel="noopener">https://github.com/LiMubai2017/aptDemo，先对作者表示感谢。</a></p>
+<hr>
+<p>乞丐版BufferKnife作为一款view注入工具，主要干了3件事，</p>
+<ol>
+<li>解析注解</li>
+<li>处理注解（生成模板类文件）</li>
+<li>通过模板类注入view对象</li>
+</ol>
+<h3 id="第0步：准备工作"><a href="#第0步：准备工作" class="headerlink" title="第0步：准备工作"></a>第0步：准备工作</h3><p>先定义注解<code>BindView</code>，被<code>@BindView</code>标记的变量会被注入。</p>
+<p>一般注解都定义在一个单独的module（如取名apt-annotation），因为它会被apt-compiler和apt-api都依赖，属于公共代码。</p>
+<p>apt-compiler是apt的主要代码所在，完成注解的解析、模板文件的生成。</p>
+<p>apt-api则是对外的工具类，供用户使用，完成注入操作。</p>
+<p>app是demo，其中定义了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@BindView</span>(value = ResourceTable.Id_text_helloworld)</span><br><span class="line"><span class="keyword">public</span> Text testTextView;</span><br></pre></td></tr></table></figure>
+<h3 id="第一步：解析注解"><a href="#第一步：解析注解" class="headerlink" title="第一步：解析注解"></a>第一步：解析注解</h3><p>在apt-compiler中定义类<code>BindViewProcessor</code>继承<code>javax.annotation.processing.AbstractProcessor</code>，实现其中的<code>getSupportedAnnotationTypes()</code>该方法注册要解析的注解。</p>
+<h3 id="第二步：处理注解（生成模板文件）"><a href="#第二步：处理注解（生成模板文件）" class="headerlink" title="第二步：处理注解（生成模板文件）"></a>第二步：处理注解（生成模板文件）</h3><p>在<code>BindViewProcessor</code>中实现<code>process()</code>方法，处理注解。</p>
+<p>先理解<code>javax.lang.model.element.Element</code>和<code>javax.lang.model.type.TypeMirror</code>，参考<a href="https://juejin.cn/post/6844903603216318478" target="_blank" rel="noopener">https://juejin.cn/post/6844903603216318478</a> 有详细的解释。</p>
+<blockquote>
+<p>简单讲：</p>
+<p>Element是描述java语言元素的类，比如包、类、变量、参数等。</p>
+<p>TypeMirror是描述Element类型的类，比如各种基本类型、数组、类等。</p>
+</blockquote>
+<p>很绕，只有多用才能真正理解。比如：demo中<code>testTextView</code>就是VariableElement元素类型</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">TypeElement enclosingElement = (TypeElement) variableElement.getEnclosingElement();<span class="comment">//获取代表MainAbility的TypeElement</span></span><br><span class="line"></span><br><span class="line">String field = variableElement.getSimpleName().toString();<span class="comment">//testTextView</span></span><br><span class="line">TypeMirror typeMirror = variableElement.asType();<span class="comment">//ohos.agp.components.Text</span></span><br></pre></td></tr></table></figure>
+<p>通过<code>log()</code>方法，可以使用<code>Messager</code>打日志，验证我们的理解。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">log(String.format(<span class="string">"element : (%s) %s "</span>, element.getKind(), element));</span><br><span class="line">log(String.format(<span class="string">"bind : (%s) %s &lt;--&gt; id = %d"</span>, typeMirror, field, id));</span><br><span class="line">输出日志：</span><br><span class="line">注: element : (FIELD) testTextView </span><br><span class="line">注: bind : (ohos.agp.components.Text) testTextView &lt;--&gt; id = <span class="number">16777222</span></span><br></pre></td></tr></table></figure>
+<p><code>generateCodeByPoet()</code>方法中，使用javapoet生成模板代码<code>MainAbility$$Autobind.java</code>（文件路径<code>app/build/generated/source/annotation/debug/com/example/apt_demo/MainAbility$$Autobind.java</code>）</p>
+<p>关于javapoet的使用，直接看官方文档吧：<a href="https://github.com/square/javapoet" target="_blank" rel="noopener">https://github.com/square/javapoet</a></p>
+<p>解释一下下面这段代码，让大家对javapoet有一直观的认识</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MethodSpec.Builder injectMethod = MethodSpec.methodBuilder(<span class="string">"inject"</span>)<span class="comment">//生成一个方法，方法名是inject</span></span><br><span class="line">        .addAnnotation(Override.class)<span class="comment">//给方法加上"Override.class"注解</span></span><br><span class="line">        .addModifiers(Modifier.PUBLIC)<span class="comment">//给方法加上访问控制符</span></span><br><span class="line">        .addParameter(Object.class, <span class="string">"target"</span>)<span class="comment">//给方法加上参数</span></span><br><span class="line">        .addStatement(<span class="string">"$T substitute = ($T)target"</span>, className, className);<span class="comment">//在方法体内定义一条语名</span></span><br></pre></td></tr></table></figure>
+<p>上面的代码生成下面的代码（<strong>我用java代码生成java代码</strong>，这就是javapoet干的事情）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inject</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">  MainAbility substitute = (MainAbility)target;</span><br><span class="line">  substitute.testTextView = (ohos.agp.components.Text) substitute.findComponentById(<span class="number">16777222</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看完上面这一坨，你如果觉得难。请用<code>JavaWriter</code>生成java文件。你就会觉得javapoet真香。</p>
+<h3 id="第三步：通过模板类注入view对象"><a href="#第三步：通过模板类注入view对象" class="headerlink" title="第三步：通过模板类注入view对象"></a>第三步：通过模板类注入view对象</h3><p>在apt-api中，我们定义一个<code>AutoBind.java</code>类封装对模板类<code>MainAbility$$Autobind.java</code>的操作。</p>
+<p>按照模板类的命名规则<code>xxx$$Autobind</code>，通过反射实例化出<code>MainAbility$$Autobind.java</code>,调用 其中的inject方法，完成view的注入。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>apt只是一个工具，在这套工具框架下，怎么处理注解才是难点。</p>
+<p>BufferKnife和我们的“乞丐版BufferKnife”本质上没有区别。除了注入view，还支持事件绑定、增量编译。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ohos/" rel="tag"># ohos</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/aa5675ef.html" rel="next" title="安卓to鸿蒙系列：Logger">
+                <i class="fa fa-chevron-left"></i> 安卓to鸿蒙系列：Logger
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/1075578.gif" alt="没用的喵叔">
+            
+              <p class="site-author-name" itemprop="name">没用的喵叔</p>
+              <p class="site-description motion-element" itemprop="description">人老了爱忘，所以记下来</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/andych008" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:andych008@163.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#apt技术的实际应用："><span class="nav-number">2.1.</span> <span class="nav-text">apt技术的实际应用：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是apt？"><span class="nav-number">2.2.</span> <span class="nav-text">什么是apt？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apt与javac的约定"><span class="nav-number">2.3.</span> <span class="nav-text">apt与javac的约定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写一个乞丐版BufferKnife"><span class="nav-number">3.</span> <span class="nav-text">写一个乞丐版BufferKnife</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第0步：准备工作"><span class="nav-number">3.1.</span> <span class="nav-text">第0步：准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：解析注解"><span class="nav-number">3.2.</span> <span class="nav-text">第一步：解析注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：处理注解（生成模板文件）"><span class="nav-number">3.3.</span> <span class="nav-text">第二步：处理注解（生成模板文件）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步：通过模板类注入view对象"><span class="nav-number">3.4.</span> <span class="nav-text">第三步：通过模板类注入view对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">没用的喵叔</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Mist</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'hBl4zEC0RSQ2OTNHGh7tYQJQ-gzGzoHsz',
+        appKey: '3cqoD6bwDV5yOQAInG6KpwWM',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
