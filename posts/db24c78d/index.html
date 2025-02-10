@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"catuncle.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="不会写脚本的Android程序员不是好的理发师！ 头都秃了，理毛啊！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android开发常用脚本">
+<meta property="og:url" content="https://catuncle.wang/posts/db24c78d/index.html">
+<meta property="og:site_name" content="老喵备忘录">
+<meta property="og:description" content="不会写脚本的Android程序员不是好的理发师！ 头都秃了，理毛啊！">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-09-28T06:52:53.000Z">
+<meta property="article:modified_time" content="2025-02-10T15:21:11.183Z">
+<meta property="article:author" content="没用的喵叔">
+<meta property="article:tag" content="android">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://catuncle.wang/posts/db24c78d/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://catuncle.wang/posts/db24c78d/","path":"posts/db24c78d/","title":"Android开发常用脚本"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Android开发常用脚本 | 老喵备忘录</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">老喵备忘录</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#dwrunning-sh-%E6%98%BE%E7%A4%BA%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E5%BA%94%E7%94%A8%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="nav-number">1.</span> <span class="nav-text">dwrunning.sh 显示正在运行的应用的信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dwpkg-sh-%E6%98%BE%E7%A4%BA%E5%AE%89%E8%A3%85%E7%9A%84%E7%89%88%E6%9C%AC%E5%8F%8A%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">dwpkg.sh 显示安装的版本及位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%80%E6%AD%BB%E6%8C%87%E5%AE%9A%E7%9A%84%E5%BA%94%E7%94%A8-dwkill-sh"><span class="nav-number">3.</span> <span class="nav-text">杀死指定的应用 dwkill.sh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logcat%E8%AE%B0%E5%BD%95%E5%88%B0%E6%96%87%E4%BB%B6-dwlog-sh"><span class="nav-number">4.</span> <span class="nav-text">logcat记录到文件 dwlog.sh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8Bapk%E5%8C%85%E7%9A%84%E4%BF%A1%E6%81%AF-dwapkinfo"><span class="nav-number">5.</span> <span class="nav-text">查看apk包的信息 dwapkinfo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%AD%BE%E5%90%8D%E7%9A%84md5-dwmd5"><span class="nav-number">6.</span> <span class="nav-text">查看签名的md5 dwmd5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90debug-keystore%E4%BD%BF%E5%85%B6%E5%92%8Crelease-keystore%E6%9C%89%E7%9B%B8%E5%90%8C%E7%9A%84%E7%AD%BE%E5%90%8D-dwkeystore-sh"><span class="nav-number">7.</span> <span class="nav-text">生成debug.keystore使其和release.keystore有相同的签名 dwkeystore.sh</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="没用的喵叔"
+      src="/images/1075578.gif">
+  <p class="site-author-name" itemprop="name">没用的喵叔</p>
+  <div class="site-description" itemprop="description">人老了爱忘，所以记下来</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/andych008" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;andych008" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:andych008@163.com" title="E-Mail → mailto:andych008@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://catuncle.wang/posts/db24c78d/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1075578.gif">
+      <meta itemprop="name" content="没用的喵叔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="老喵备忘录">
+      <meta itemprop="description" content="人老了爱忘，所以记下来">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Android开发常用脚本 | 老喵备忘录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android开发常用脚本
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-09-28 14:52:53" itemprop="dateCreated datePublished" datetime="2018-09-28T14:52:53+08:00">2018-09-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-02-10 23:21:11" itemprop="dateModified" datetime="2025-02-10T23:21:11+08:00">2025-02-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>不会写脚本的Android程序员不是好的理发师！</p>
+<p>头都秃了，理毛啊！</p>
+<span id="more"></span> 
+
+<h2 id="dwrunning-sh-显示正在运行的应用的信息"><a href="#dwrunning-sh-显示正在运行的应用的信息" class="headerlink" title="dwrunning.sh 显示正在运行的应用的信息"></a>dwrunning.sh 显示正在运行的应用的信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">adb shell ps | grep <span class="string">&quot;com.catuncle&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="dwpkg-sh-显示安装的版本及位置"><a href="#dwpkg-sh-显示安装的版本及位置" class="headerlink" title="dwpkg.sh 显示安装的版本及位置"></a>dwpkg.sh 显示安装的版本及位置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#http://man.linuxde.net/sed</span></span><br><span class="line"><span class="function"><span class="title">doShow</span></span>() &#123;</span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\e[36m<span class="variable">$1</span>:\e[0m&quot;</span></span><br><span class="line">    <span class="comment">#替换第一个&quot;package:&quot;为空</span></span><br><span class="line">    <span class="comment">#替换所有的&quot;$1&quot;为空</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$2</span>&quot;</span> | grep <span class="variable">$1</span> |sed <span class="string">&#x27;s/package://1&#x27;</span> |sed <span class="string">&#x27;s/=&#x27;</span><span class="variable">$1</span><span class="string">&#x27;//g&#x27;</span></span><br><span class="line">    <span class="comment">#用&quot;=&quot;分割，取第2个</span></span><br><span class="line">    adb shell dumpsys package <span class="variable">$1</span> | grep <span class="string">&quot;versionName=&quot;</span> |<span class="built_in">cut</span> -d <span class="string">&quot;=&quot;</span> -f2</span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">packageInfosStr=`adb shell pm list package -f`</span><br><span class="line">doShow com.catuncle.app1 <span class="string">&quot;<span class="variable">$packageInfosStr</span>&quot;</span></span><br><span class="line">doShow com.catuncle.app2 <span class="string">&quot;<span class="variable">$packageInfosStr</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="杀死指定的应用-dwkill-sh"><a href="#杀死指定的应用-dwkill-sh" class="headerlink" title="杀死指定的应用 dwkill.sh"></a>杀死指定的应用 dwkill.sh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="function"><span class="title">doKill</span></span>() &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;you chose &quot;</span><span class="variable">$1</span></span><br><span class="line">    <span class="comment">#取pid，然后kill</span></span><br><span class="line">    adb shell ps | grep <span class="variable">$opt</span> | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> | xargs adb shell <span class="built_in">kill</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;kill it----&quot;</span></span><br><span class="line">PS3=<span class="string">&#x27;Please enter your choice: &#x27;</span></span><br><span class="line">options=(<span class="string">&quot;com.catuncle.app1&quot;</span> <span class="string">&quot;com.catuncle.app2&quot;</span>)</span><br><span class="line"><span class="keyword">select</span> opt <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$&#123;options[@]&#125;</span>&quot;</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$opt</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        doKill <span class="variable">$opt</span></span><br><span class="line">        <span class="built_in">break</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> invalid option</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="logcat记录到文件-dwlog-sh"><a href="#logcat记录到文件-dwlog-sh" class="headerlink" title="logcat记录到文件 dwlog.sh"></a>logcat记录到文件 dwlog.sh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">DATE=`<span class="built_in">date</span> <span class="string">&#x27;+%Y.%m.%d_%H.%M.%S&#x27;</span>`</span><br><span class="line"><span class="comment">#catuncle is your log tag</span></span><br><span class="line">adb logcat -v threadtime | grep <span class="string">&quot;catuncle&quot;</span> &gt;<span class="built_in">log</span><span class="variable">$DATE</span>.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看apk包的信息-dwapkinfo"><a href="#查看apk包的信息-dwapkinfo" class="headerlink" title="查看apk包的信息 dwapkinfo"></a>查看apk包的信息 dwapkinfo</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">apkFile=<span class="variable">$1</span></span><br><span class="line">~/bin/_tools/aapt d badging <span class="string">&quot;<span class="variable">$apkFile</span>&quot;</span>  | grep <span class="string">&quot;package:\|launchable-activity:&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="查看签名的md5-dwmd5"><a href="#查看签名的md5-dwmd5" class="headerlink" title="查看签名的md5 dwmd5"></a>查看签名的md5 dwmd5</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#获取apk中签名的md5(有冒号)</span></span><br><span class="line"><span class="function"><span class="title">getApkMD5</span></span>() &#123;</span><br><span class="line">    str=`keytool -printcert -jarfile <span class="variable">$1</span> |grep  <span class="string">&quot;MD5:&quot;</span>`</span><br><span class="line">    <span class="comment">#分割符为&#x27;:&#x27;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$&#123;str#*:&#125;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#获取keystore的md5(有冒号)</span></span><br><span class="line"><span class="function"><span class="title">getKeyMD5</span></span>() &#123;</span><br><span class="line">    str=`keytool -list -v -keystore <span class="variable">$1</span> -storepass <span class="variable">$2</span> |grep  <span class="string">&quot;MD5:&quot;</span>`</span><br><span class="line">    <span class="comment">#分割符为&#x27;:&#x27;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$&#123;str#*:&#125;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#去掉md5的冒号、转为小写字母</span></span><br><span class="line"><span class="function"><span class="title">simple</span></span>() &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span> | sed <span class="string">&#x27;s/://g&#x27;</span> | <span class="built_in">tr</span> <span class="string">&#x27;[:upper:]&#x27;</span> <span class="string">&#x27;[:lower:]&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#确认参数个数&gt;=1</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$#</span> -lt 1 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\e[36m查看apk包签名或keystore的md5(jdk&gt;=7):\e[0m&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;</span></span><br><span class="line"><span class="string">Usage 1: <span class="variable">$0</span> &#x27;apk file path&#x27;</span></span><br><span class="line"><span class="string">Usage 2: <span class="variable">$0</span> &#x27;keystore file path&#x27; &#x27;storepass签名文件密码&#x27;&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">    <span class="built_in">exit</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$&#123;1##*.&#125;</span> == <span class="string">&quot;apk&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    var=`getApkMD5 <span class="variable">$1</span>`</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    var=`getKeyMD5 <span class="variable">$1</span> <span class="variable">$2</span>`</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">simple <span class="variable">$var</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="生成debug-keystore使其和release-keystore有相同的签名-dwkeystore-sh"><a href="#生成debug-keystore使其和release-keystore有相同的签名-dwkeystore-sh" class="headerlink" title="生成debug.keystore使其和release.keystore有相同的签名 dwkeystore.sh"></a>生成debug.keystore使其和release.keystore有相同的签名 dwkeystore.sh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="function"><span class="title">convert</span></span>() &#123;</span><br><span class="line">    keystore=<span class="string">&quot;debug.keystore&quot;</span></span><br><span class="line">    <span class="built_in">alias</span>=<span class="variable">$2</span></span><br><span class="line">    passwd=<span class="variable">$3</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">cp</span> <span class="variable">$1</span> <span class="variable">$keystore</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#修改别名</span></span><br><span class="line">    keytool -changealias -keystore <span class="variable">$keystore</span> -<span class="built_in">alias</span> <span class="variable">$alias</span> -destalias <span class="string">&quot;androiddebugkey&quot;</span> -storepass <span class="variable">$passwd</span></span><br><span class="line">    <span class="comment">#修改密钥口令</span></span><br><span class="line">    keytool -keypasswd -keystore <span class="variable">$keystore</span> -<span class="built_in">alias</span> <span class="string">&quot;androiddebugkey&quot;</span> -storepass <span class="variable">$passwd</span> -keypass <span class="variable">$passwd</span> -new <span class="string">&quot;android&quot;</span></span><br><span class="line">    <span class="comment">#修改密钥库口令</span></span><br><span class="line">    keytool -storepasswd -keystore <span class="variable">$keystore</span> -storepass <span class="variable">$passwd</span> -new <span class="string">&quot;android&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\e[36m转换完成^~^\e[0m&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\e[36m-------签名信息如下:-------\e[0m&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">    keytool -list -v -keystore <span class="variable">$keystore</span> -storepass <span class="string">&quot;android&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\e[36m---------------------------\e[0m&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#确认参数个数==2</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$#</span> -eq 2 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\e[36m-------<span class="variable">$1</span> 签名信息如下:-------\e[0m&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">    keytool -list -v -keystore <span class="variable">$1</span> -storepass <span class="variable">$2</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\e[36m---------------------------\e[0m&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">    <span class="built_in">exit</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#确认参数个数==3</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$#</span> -eq 3 ]; <span class="keyword">then</span></span><br><span class="line">    convert <span class="variable">$1</span> <span class="variable">$2</span> <span class="variable">$3</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\e[36mUsage 1: 生成debug.keystore使其和release.keystore有相同的签名:\e[0m&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$0</span> &#x27;release.keystore&#x27; &#x27;alias&#x27; &#x27;passwd&#x27;&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">&quot;\e[36mUsage 2: 查看release.keystore的签名:\e[0m&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$0</span> &#x27;release.keystore&#x27; &#x27;passwd&#x27;&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> </span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/android/" rel="tag"># android</a>
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/shell/" rel="tag"># shell</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/9bc95265/" rel="prev" title="Android开发环境">
+                  <i class="fa fa-angle-left"></i> Android开发环境
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/85c66432/" rel="next" title="shell编程常用代码片断">
+                  shell编程常用代码片断 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">京ICP备2022002584号-1 </a>
+      <img src="/images/beian.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">没用的喵叔</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

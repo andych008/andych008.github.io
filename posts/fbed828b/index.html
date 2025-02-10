@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"catuncle.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="我的第一篇博客，也是我用Hexo不断添加新功能的流水账。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="my first 使用GitHub和Hexo搭建免费静态Blog">
+<meta property="og:url" content="https://catuncle.wang/posts/fbed828b/index.html">
+<meta property="og:site_name" content="老喵备忘录">
+<meta property="og:description" content="我的第一篇博客，也是我用Hexo不断添加新功能的流水账。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-02-11T14:24:14.000Z">
+<meta property="article:modified_time" content="2025-02-10T16:47:12.500Z">
+<meta property="article:author" content="没用的喵叔">
+<meta property="article:tag" content="node">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://catuncle.wang/posts/fbed828b/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://catuncle.wang/posts/fbed828b/","path":"posts/fbed828b/","title":"my first 使用GitHub和Hexo搭建免费静态Blog"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>my first 使用GitHub和Hexo搭建免费静态Blog | 老喵备忘录</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">老喵备忘录</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85node"><span class="nav-number">1.</span> <span class="nav-text">安装node</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7-hexo-cli"><span class="nav-number">2.</span> <span class="nav-text">安装命令行工具 hexo-cli</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hexo%E4%B9%8Bhello-world"><span class="nav-number">3.</span> <span class="nav-text">hexo之hello world</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0"><span class="nav-number">4.</span> <span class="nav-text">写第一篇文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">生成静态文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87github-pages"><span class="nav-number">6.</span> <span class="nav-text">准备github pages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99"><span class="nav-number">7.</span> <span class="nav-text">部署网站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0%E5%A4%9A%E4%B8%AA%E7%AB%99%E7%82%B9-%E5%A6%82-coding-net%E5%92%8Cgithub"><span class="nav-number">8.</span> <span class="nav-text">部署到多个站点(如:coding.net和github)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">9.</span> <span class="nav-text">链接持久化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89favicon-%E4%BB%A5themes-landscape%E4%B8%BA%E4%BE%8B"><span class="nav-number">10.</span> <span class="nav-text">自定义favicon(以themes&#x2F;landscape为例)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89CNAME-%E9%98%B2%E6%AD%A2%E6%AF%8F%E6%AC%A1deploy%E5%90%8ECustom-domain%E8%A2%AB%E9%87%8D%E7%BD%AE"><span class="nav-number">11.</span> <span class="nav-text">定义CNAME(防止每次deploy后Custom domain被重置)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8next%E4%B8%BB%E9%A2%98"><span class="nav-number">12.</span> <span class="nav-text">使用next主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">13.</span> <span class="nav-text">常用命令</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="没用的喵叔"
+      src="/images/1075578.gif">
+  <p class="site-author-name" itemprop="name">没用的喵叔</p>
+  <div class="site-description" itemprop="description">人老了爱忘，所以记下来</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/andych008" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;andych008" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:andych008@163.com" title="E-Mail → mailto:andych008@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://catuncle.wang/posts/fbed828b/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1075578.gif">
+      <meta itemprop="name" content="没用的喵叔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="老喵备忘录">
+      <meta itemprop="description" content="人老了爱忘，所以记下来">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="my first 使用GitHub和Hexo搭建免费静态Blog | 老喵备忘录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          my first 使用GitHub和Hexo搭建免费静态Blog
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-02-11 22:24:14" itemprop="dateCreated datePublished" datetime="2018-02-11T22:24:14+08:00">2018-02-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-02-11 00:47:12" itemprop="dateModified" datetime="2025-02-11T00:47:12+08:00">2025-02-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>我的第一篇博客，也是我用Hexo不断添加新功能的流水账。</p>
+<span id="more"></span> 
+
+<h2 id="安装node"><a href="#安装node" class="headerlink" title="安装node"></a>安装<a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/">node</a></h2><ul>
+<li>npm 国内镜像</li>
+</ul>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https:<span class="comment">//registry.npmmirror.com</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置后可通过下面方式来验证是否成功</span></span><br><span class="line">npm config get registry</span><br><span class="line"></span><br><span class="line"><span class="comment">//如果网络还有问题，继续根据你本机的情况设置代理</span></span><br><span class="line">npm config set proxy=http:<span class="comment">//127.0.0.1:7890</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="安装命令行工具-hexo-cli"><a href="#安装命令行工具-hexo-cli" class="headerlink" title="安装命令行工具 hexo-cli"></a>安装命令行工具 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">hexo-cli</a></h2><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># 全局安装 hexo-cli</span></span><br><span class="line">$ npm install hexo-<span class="keyword">cli</span> -g</span><br></pre></td></tr></table></figure>
+
+<h2 id="hexo之hello-world"><a href="#hexo之hello-world" class="headerlink" title="hexo之hello world"></a>hexo之hello world</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个基于 hexo 模板的新项目</span></span><br><span class="line"><span class="variable">$</span> hexo init blog</span><br><span class="line"><span class="comment"># 安装依赖，走你</span></span><br><span class="line"><span class="variable">$</span> <span class="built_in">cd</span> blog</span><br><span class="line"><span class="variable">$</span> npm install</span><br><span class="line"><span class="comment"># 运行</span></span><br><span class="line"><span class="variable">$</span> hexo s <span class="literal">--debug</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="写第一篇文章"><a href="#写第一篇文章" class="headerlink" title="写第一篇文章"></a>写第一篇文章</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建一个基于 hexo 模板的新项目</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">hexo new <span class="string">&quot;myfirst&quot;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编辑 blog\<span class="built_in">source</span>\_posts\myfirst.md</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 同hexo <span class="keyword">generate</span>，文件生成在publish目录里</span><br><span class="line">$ hexo g</span><br></pre></td></tr></table></figure>
+
+<h2 id="准备github-pages"><a href="#准备github-pages" class="headerlink" title="准备github pages"></a>准备<a target="_blank" rel="noopener" href="https://pages.github.com/">github pages</a></h2><ul>
+<li>照着github pages上的向导，github上建一个项目(按照惯例名字用<code>andych008.github.io</code>)，同时也是blog的地址。</li>
+<li><a target="_blank" rel="noopener" href="https://help.github.com/articles/quick-start-setting-up-a-custom-domain/">自定义域名</a></li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@    CNAME    默认    andych008<span class="selector-class">.github</span><span class="selector-class">.io</span>    http:<span class="comment">//catuncle.wang/</span></span><br><span class="line">www    CNAME    默认    andych008<span class="selector-class">.github</span><span class="selector-class">.io</span>    http:<span class="comment">//www.catuncle.wang/</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://help.github.com/articles/adding-or-removing-a-custom-domain-for-your-github-pages-site/">别忘记在github上也要设置</a><br>只填<code>catuncle.wang</code>，没有前面的http</li>
+</ul>
+<h2 id="部署网站"><a href="#部署网站" class="headerlink" title="部署网站"></a>部署网站</h2><ul>
+<li>准备</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="attr">--save</span></span><br><span class="line">git config <span class="attr">--global</span> user<span class="selector-class">.name</span> <span class="string">&quot;喵叔catuncle&quot;</span></span><br><span class="line">git config <span class="attr">--global</span> user<span class="selector-class">.email</span> <span class="string">&quot;andych008@163.com&quot;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>ssh key</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;andych008<span class="variable">@163</span>.com&quot;</span> <span class="comment">#生成ssh密钥文件</span></span><br></pre></td></tr></table></figure>
+<pre><code>id_rsa.pub内容全部复制到GitHub_Settings_keys
+
+Git Bash中检测GitHub公钥设置是否成功，输入 `ssh git@github.com`
+</code></pre>
+<ul>
+<li>修改_config.yml</li>
+</ul>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">deploy:</span></span><br><span class="line"><span class="symbol">  type:</span> git</span><br><span class="line"><span class="symbol">  repo:</span> https:<span class="comment">//github.com/andych008/andych008.github.io.git</span></span><br><span class="line"><span class="symbol">  branch:</span> master</span><br></pre></td></tr></table></figure>
+<ul>
+<li>部署</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo c  #即hexo clean</span><br><span class="line">$ hexo d -g #-g表示deploy前先<span class="keyword">generate</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="部署到多个站点-如-coding-net和github"><a href="#部署到多个站点-如-coding-net和github" class="headerlink" title="部署到多个站点(如:coding.net和github)"></a>部署到多个站点(如:coding.net和github)</h2><ul>
+<li>修改_config.yml</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo:</span><br><span class="line">    github: git@github<span class="selector-class">.com</span>:andych008/andych008<span class="selector-class">.github</span><span class="selector-class">.io</span><span class="selector-class">.git</span>,master</span><br><span class="line">    coding: git@git<span class="selector-class">.coding</span><span class="selector-class">.net</span>:dwgg/dwgg<span class="selector-class">.coding</span><span class="selector-class">.me</span><span class="selector-class">.git</span>,master</span><br><span class="line">  name: 喵叔catuncle</span><br><span class="line">  email: andych008@<span class="number">163</span>.com</span><br></pre></td></tr></table></figure>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues/2125">能否hexo deploy 时指定git账户</a><br>NoahDragon的说法正确，记得要<code>rm -rf .deploy_git/</code>然后清理、并重新部署</li>
+</ul>
+<h2 id="链接持久化"><a href="#链接持久化" class="headerlink" title="链接持久化"></a>链接持久化</h2><blockquote>
+<p>默认情况下hexo的生成的url地址是日期+md文件名的形式，如果url里有中文，看着不舒服，不方便分享。<br>还好hexo有很多现成的插件来帮我们解决这个问题：</p>
+</blockquote>
+<ol>
+<li><p><code>npm install hexo-abbrlink --save</code></p>
+</li>
+<li><p>_config.yml里的配置:</p>
+ <figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># URL</span></span><br><span class="line"><span class="meta">#这里先注释掉旧的配置</span></span><br><span class="line"><span class="meta">#permalink: :year/:month/:day/:title/</span></span><br><span class="line"><span class="meta">#permalink_defaults:</span></span><br><span class="line"><span class="symbol">permalink:</span> posts/:abbrlink.html</span><br><span class="line"><span class="symbol">abbrlink:</span></span><br><span class="line"><span class="symbol">  alg:</span> crc32  <span class="meta"># 算法：crc16(default) and crc32</span></span><br><span class="line"><span class="symbol">  rep:</span> hex    <span class="meta"># 进制：dec(default) and hex</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改scaffolds里的模版文件，修改post.md为:</p>
+ <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> &#123;&#123; <span class="string">title</span> &#125;&#125;</span><br><span class="line"><span class="attr">date:</span> &#123;&#123; <span class="string">date</span> &#125;&#125;</span><br><span class="line"><span class="attr">comments:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">categories:</span></span><br><span class="line"><span class="attr">tags:</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="自定义favicon-以themes-landscape为例"><a href="#自定义favicon-以themes-landscape为例" class="headerlink" title="自定义favicon(以themes&#x2F;landscape为例)"></a>自定义favicon(以themes&#x2F;landscape为例)</h2><ol>
+<li><p>在<a target="_blank" rel="noopener" href="https://realfavicongenerator.net上面生成favicon.ico文件/">https://realfavicongenerator.net上面生成favicon.ico文件</a></p>
+</li>
+<li><p>把favicon.ico文件放在<code>themes/landscape/source/favicon.ico</code></p>
+</li>
+<li><p>修改<code>themes/landscape/_config.yml</code>:</p>
+ <figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">favicon:</span> /favicon.ico</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="定义CNAME-防止每次deploy后Custom-domain被重置"><a href="#定义CNAME-防止每次deploy后Custom-domain被重置" class="headerlink" title="定义CNAME(防止每次deploy后Custom domain被重置)"></a>定义CNAME(防止每次deploy后Custom domain被重置)</h2><ol>
+<li>新建<code>source/CNAME</code></li>
+<li>CNAME文件内容为 : <code>catuncle.wang</code></li>
+</ol>
+<h2 id="使用next主题"><a href="#使用next主题" class="headerlink" title="使用next主题"></a><a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next/blob/master/docs/zh-CN/README.md">使用next主题</a></h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next/blob/master/docs/zh-CN/README.md">hexo-theme-next</a></p>
+</blockquote>
+<ul>
+<li><p>tags需要手动生成</p>
+<ol>
+<li><code>$ hexo new page tags</code>，这时会生成<code>sources/tags/index.md</code></li>
+<li>打开这个文件<code>sources/tags/index.md</code>编辑 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2016-11-11 21:40:58</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">&quot;tags&quot;</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure></li>
+<li>在主题配置文件中，在menu项下，要把tags页打开 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">menu</span>:</span><br><span class="line">  <span class="keyword">tags</span>: /<span class="keyword">tags</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>头像</p>
+ <figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># Sidebar Avatar</span></span><br><span class="line"><span class="symbol">avatar:</span></span><br><span class="line">  <span class="meta">#必须是gif图</span></span><br><span class="line"><span class="symbol">  url:</span> <span class="keyword">/images/</span><span class="number">1075578.</span>gif</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>favicon必须放在&#x2F;images下</p>
+ <figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">favicon:</span></span><br><span class="line"><span class="symbol">  small:</span> <span class="keyword">/images/</span>favicon<span class="number">-16</span>x16.png</span><br><span class="line"><span class="symbol">  medium:</span> <span class="keyword">/images/</span>favicon<span class="number">-32</span>x32.png</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开启Valine评论系统</p>
+ <figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># You can get your appid and appkey from https://leancloud.cn</span></span><br><span class="line"><span class="comment"># more info please open https://valine.js.org</span></span><br><span class="line"><span class="params">valine:</span></span><br><span class="line">  <span class="params">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="params">appid:</span> xxx <span class="comment"># your leancloud application appid</span></span><br><span class="line">  <span class="params">appkey:</span> xxx <span class="comment"># your leancloud application appkey</span></span><br></pre></td></tr></table></figure>
+<p> 如果哪天评论不能用了，很可能是30天内没有评论，leancloud自动关闭了存储服务。只需要在leancloud后台激活一下。</p>
+</li>
+<li><p>置顶</p>
+<p> 安装：</p>
+ <figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm uninstall hexo-generator-<span class="built_in">index</span> --<span class="keyword">save</span></span><br><span class="line">$ npm install hexo-generator-<span class="built_in">index</span>-pin-top --<span class="keyword">save</span></span><br></pre></td></tr></table></figure>
+<p> 配置：打开<code>/themes/next/layout/_macro/post.swig</code>，定位到<code>&lt;div class=&quot;post-meta&quot;&gt;</code>标签下，插入</p>
+ <figure class="highlight django"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="template-tag">&#123;% <span class="name"><span class="name">if</span></span> post.top %&#125;</span><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;fa fa-thumb-tack&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">font</span> <span class="attr">color</span>=<span class="string">7D26CD</span>&gt;</span>置顶<span class="tag">&lt;/<span class="name">font</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;post-meta-divider&quot;</span>&gt;</span>|<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span><span class="template-tag">&#123;% <span class="name"><span class="name">endif</span></span> %&#125;</span></span><br></pre></td></tr></table></figure>
+<p> 使用：<code>top: true</code></p>
+ <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">Android版本及别名</span></span><br><span class="line"><span class="attr">tags:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">android</span></span><br><span class="line"><span class="attr">abbrlink:</span> <span class="string">7504d8c</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2018-09-19 15:05:09</span></span><br><span class="line"><span class="attr">top:</span> <span class="literal">true</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>阅读全文 »</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Automatically Excerpt. Not recommend.</span><br><span class="line"># Please use <span class="comment">&lt;!-- more --&gt;</span> in the post to control excerpt accurately.</span><br><span class="line">auto_excerpt:</span><br><span class="line">  enable: true</span><br><span class="line">  length: 150</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">npm</span> list -g --depth=<span class="number">0</span> </span><br><span class="line"><span class="built_in">npm</span> -g  uninstall github-todos</span><br><span class="line">hexo clean <span class="comment">#清除缓存，若是网页正常情况下可以忽略这条命令</span></span><br><span class="line"><span class="built_in">npm</span> install hexo-cli -g <span class="comment">#再次执行，会升级hexo-cli</span></span><br><span class="line"><span class="built_in">npm</span> update <span class="comment">#在博客目录执行，会升级hexo的版本</span></span><br><span class="line">hexo version <span class="comment">#查看hexo相关的版本信息</span></span><br></pre></td></tr></table></figure>
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/node/" rel="tag"># node</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/e95f2d29/" rel="next" title="多个module，输出一个jar包">
+                  多个module，输出一个jar包 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">京ICP备2022002584号-1 </a>
+      <img src="/images/beian.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">没用的喵叔</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

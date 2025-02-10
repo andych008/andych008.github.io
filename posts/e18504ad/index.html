@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"catuncle.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="之前写过一篇 程序员怎么做“竞品分析”：抓包工具的使用。如果不实践，这些内容在网上都能查到，但是自己尝试往往会失败。刚好昨天帮朋友解决一个小问题，抓包一款应用：http:&#x2F;&#x2F;app.xiaomi.com&#x2F;detail&#x2F;1295834。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录一次app抓包实践">
+<meta property="og:url" content="https://catuncle.wang/posts/e18504ad/index.html">
+<meta property="og:site_name" content="老喵备忘录">
+<meta property="og:description" content="之前写过一篇 程序员怎么做“竞品分析”：抓包工具的使用。如果不实践，这些内容在网上都能查到，但是自己尝试往往会失败。刚好昨天帮朋友解决一个小问题，抓包一款应用：http:&#x2F;&#x2F;app.xiaomi.com&#x2F;detail&#x2F;1295834。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_01.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_02.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_03.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_04.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_05.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_06.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_07.jpg">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_08.jpg">
+<meta property="article:published_time" content="2021-02-25T08:07:19.000Z">
+<meta property="article:modified_time" content="2025-02-10T15:21:11.194Z">
+<meta property="article:author" content="没用的喵叔">
+<meta property="article:tag" content="android">
+<meta property="article:tag" content="crack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/andych008/pic/raw/master/img/proxy_01.jpg">
+
+
+<link rel="canonical" href="https://catuncle.wang/posts/e18504ad/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://catuncle.wang/posts/e18504ad/","path":"posts/e18504ad/","title":"记录一次app抓包实践"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记录一次app抓包实践 | 老喵备忘录</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">老喵备忘录</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E4%B8%8A%E6%88%AA%E5%9B%BE%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">先上截图：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%81%E7%A0%B4%E5%8F%A3"><span class="nav-number">2.</span> <span class="nav-text">突破口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="没用的喵叔"
+      src="/images/1075578.gif">
+  <p class="site-author-name" itemprop="name">没用的喵叔</p>
+  <div class="site-description" itemprop="description">人老了爱忘，所以记下来</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/andych008" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;andych008" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:andych008@163.com" title="E-Mail → mailto:andych008@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://catuncle.wang/posts/e18504ad/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1075578.gif">
+      <meta itemprop="name" content="没用的喵叔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="老喵备忘录">
+      <meta itemprop="description" content="人老了爱忘，所以记下来">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记录一次app抓包实践 | 老喵备忘录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记录一次app抓包实践
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-02-25 16:07:19" itemprop="dateCreated datePublished" datetime="2021-02-25T16:07:19+08:00">2021-02-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-02-10 23:21:11" itemprop="dateModified" datetime="2025-02-10T23:21:11+08:00">2025-02-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>之前写过一篇 <a target="_blank" rel="noopener" href="https://unclecat.wang/posts/e5c1321e.html">程序员怎么做“竞品分析”：抓包工具的使用</a>。如果不实践，这些内容在网上都能查到，但是自己尝试往往会失败。刚好昨天帮朋友解决一个小问题，抓包一款应用：<a target="_blank" rel="noopener" href="http://app.xiaomi.com/detail/1295834%E3%80%82">http://app.xiaomi.com/detail/1295834。</a></p>
+<span id="more"></span> 
+
+<h3 id="先上截图："><a href="#先上截图：" class="headerlink" title="先上截图："></a>先上截图：</h3> <img src="https://gitee.com/andych008/pic/raw/master/img/proxy_01.jpg" width = "400" />
+
+
+
+<p>看到toast提示了吧？<strong>“请关闭代理，在尝试”</strong>。本来我们设置好代理，用charles抓包。却看到了这个。貌似不知道怎么继续下去了。请跟我往下看，到最后大家会发现多数应用都有很多漏洞，我们很轻松地就可以利用这些漏洞。</p>
+<h3 id="突破口"><a href="#突破口" class="headerlink" title="突破口"></a>突破口</h3><p>hack的第一步，往往是先找突破口。突破口找得准，破解一个app就是分分钟的事情。</p>
+<p>突破口有很多，比如最常见的就是字符串。软件注册，会提示“注册成功”，防代理，会提示类似上图的内容。</p>
+<p>反编译一下，只要有工具，反编译其实就是点几下鼠标的事情。用<a target="_blank" rel="noopener" href="https://github.com/skylot/jadx/releases">jadx-gui-1.2.0-no-jre-win.exe</a>打开apk，</p>
+<p>搜索文本，跳转<br><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_02.jpg"></p>
+<p>如下图，HTTPCaller是个http请求的工具类，其中<code>boolean checkAgent()</code>判断是否有代理。而且如果MLog.debug这个开关为true，就会跳过判断（貌似我们都爱这样写代码&#x2F;&#x2F;此处有狗头）。如果把这个值改成true，就是所谓的debug模式了。<br><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_03.jpg"></p>
+<p>如下图，查找<code>MLog.debug</code>的用例</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_04.jpg"></p>
+<p>如下图，查找MLog.debug的用例结果页，只有一处是写操作</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_05.jpg"></p>
+<p>如下图，查找<code>setDebug</code>的用例</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_06.jpg"></p>
+<p>如下图，这个开关是从sp中读取，继续查找<code>CoreConst.CORE_LIB_DEBUG_KEY</code>的用例</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_07.jpg"></p>
+<p>如下图，连续点击某个控件10次以上来修改开关。再继续查找<code>OnLogSwitchClickListener</code>的用例，我们找到是webActivity的标题设置了这个点击事件。所以从这个app里找一个web页，比如“用户协议”页面。</p>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/proxy_08.jpg"></p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>这个app有调试开关，打开app，我的-&gt;设置-&gt;关于-&gt;用户协议。然后连续点击标题“用户协议”10次以上，会toast提示“已开启调试模式”。这时就可以抓包了。</p>
+<p>而且继续跟代码，会发现logcat里还有http日志，logcat的 tag就是http。所以，对于程序员们，<strong>调试开关</strong>不能乱加！不然太容易被利用了。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/android/" rel="tag"># android</a>
+              <a href="/tags/crack/" rel="tag"># crack</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/976ae893/" rel="prev" title="OkHttp系列:自动获取access_token">
+                  <i class="fa fa-angle-left"></i> OkHttp系列:自动获取access_token
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/a3e52236/" rel="next" title="安卓to鸿蒙系列：Timber">
+                  安卓to鸿蒙系列：Timber <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">京ICP备2022002584号-1 </a>
+      <img src="/images/beian.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">没用的喵叔</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

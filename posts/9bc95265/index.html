@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"catuncle.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在墙内，搭个Android开发环境其实有点难，也有点慢。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android开发环境">
+<meta property="og:url" content="https://catuncle.wang/posts/9bc95265/index.html">
+<meta property="og:site_name" content="老喵备忘录">
+<meta property="og:description" content="在墙内，搭个Android开发环境其实有点难，也有点慢。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-09-20T01:04:46.000Z">
+<meta property="article:modified_time" content="2025-02-10T15:21:11.183Z">
+<meta property="article:author" content="没用的喵叔">
+<meta property="article:tag" content="android">
+<meta property="article:tag" content="gradle">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://catuncle.wang/posts/9bc95265/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://catuncle.wang/posts/9bc95265/","path":"posts/9bc95265/","title":"Android开发环境"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Android开发环境 | 老喵备忘录</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">老喵备忘录</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#gradle-properties"><span class="nav-number">1.</span> <span class="nav-text">gradle.properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build-gradle"><span class="nav-number">2.</span> <span class="nav-text">build.gradle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-gradle-%E4%B8%8B%E5%88%9B%E5%BB%BAinit-gradle%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">在~&#x2F;.gradle&#x2F;下创建init.gradle文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#as-3-6%E7%BC%96%E8%AF%91%E8%BE%93%E5%87%BA%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">as 3.6编译输出中文乱码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-gradle%E7%9B%AE%E5%BD%95%E4%BD%8D%E7%BD%AE"><span class="nav-number">5.</span> <span class="nav-text">修改.gradle目录位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9mavenLocal-%E7%9B%AE%E5%BD%95%E4%BD%8D%E7%BD%AE"><span class="nav-number">6.</span> <span class="nav-text">修改mavenLocal()目录位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-android%E7%9B%AE%E5%BD%95%E4%BD%8D%E7%BD%AE"><span class="nav-number">7.</span> <span class="nav-text">修改.android目录位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-AndroidStudio%E7%9B%AE%E5%BD%95%E4%BD%8D%E7%BD%AE"><span class="nav-number">8.</span> <span class="nav-text">修改.AndroidStudio目录位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github%E5%8A%A0%E9%80%9F-%E6%8E%A8%E8%8D%90"><span class="nav-number">9.</span> <span class="nav-text">github加速(推荐)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github%E5%8A%A0%E9%80%9F-%E5%A6%82%E6%9E%9C%E4%BD%A0%E7%9A%84%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E6%B8%A0%E9%81%93%E5%BE%88%E5%BF%AB%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%BB%A3%E7%90%86%E6%96%B9%E6%A1%88"><span class="nav-number">10.</span> <span class="nav-text">github加速(如果你的科学上网渠道很快，可以用代理方案)</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="没用的喵叔"
+      src="/images/1075578.gif">
+  <p class="site-author-name" itemprop="name">没用的喵叔</p>
+  <div class="site-description" itemprop="description">人老了爱忘，所以记下来</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/andych008" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;andych008" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:andych008@163.com" title="E-Mail → mailto:andych008@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://catuncle.wang/posts/9bc95265/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1075578.gif">
+      <meta itemprop="name" content="没用的喵叔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="老喵备忘录">
+      <meta itemprop="description" content="人老了爱忘，所以记下来">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Android开发环境 | 老喵备忘录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android开发环境
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-09-20 09:04:46" itemprop="dateCreated datePublished" datetime="2018-09-20T09:04:46+08:00">2018-09-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-02-10 23:21:11" itemprop="dateModified" datetime="2025-02-10T23:21:11+08:00">2025-02-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在墙内，搭个Android开发环境其实有点难，也有点慢。</p>
+<span id="more"></span> 
+
+<h2 id="gradle-properties"><a href="#gradle-properties" class="headerlink" title="gradle.properties"></a>gradle.properties</h2><p>如下内容可以配置在全局<code>/home/andy/.gradle/gradle.properties</code></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#systemProp.https.proxyPort=1080</span></span><br><span class="line"><span class="comment">#systemProp.http.proxyHost=127.0.0.1</span></span><br><span class="line"><span class="comment">#systemProp.https.proxyHost=127.0.0.1</span></span><br><span class="line"><span class="comment">#systemProp.http.proxyPort=1080</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#gradle ss socks代理</span></span><br><span class="line">org.gradle.<span class="attribute">jvmargs</span>=-DsocksProxyHost=127.0.0.1 <span class="attribute">-DsocksProxyPort</span>=1080</span><br><span class="line"></span><br><span class="line"><span class="comment">#系统中的jdk可能不是我们想要的</span></span><br><span class="line">org.gradle.java.<span class="attribute">home</span>=/home/andy/apps/Android/android-studio/jre</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="build-gradle"><a href="#build-gradle" class="headerlink" title="build.gradle"></a>build.gradle</h2><p><a target="_blank" rel="noopener" href="https://maven.aliyun.com/mvn/view">https://maven.aliyun.com/mvn/view</a></p>
+<figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">maven &#123; <span class="attribute">url &#x27;https</span>://maven<span class="variable">.aliyun</span><span class="variable">.com</span>/repository/google/&#x27; &#125;</span><br><span class="line">maven &#123; url &#x27;https://maven<span class="variable">.aliyun</span><span class="variable">.com</span>/repository/public/&#x27;&#125;</span><br><span class="line">maven &#123; url &#x27;https://maven<span class="variable">.aliyun</span><span class="variable">.com</span>/repository/gradle-plugin&#x27;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">buildscript &#123;</span><br><span class="line">    ext<span class="variable">.kotlin_version</span> = &#x27;1.2.51&#x27;</span><br><span class="line">    </span><br><span class="line">    repositories &#123;</span><br><span class="line">        maven&#123; url rootProject<span class="variable">.file</span>(&quot;repo-local&quot;) &#125;</span><br><span class="line">        maven &#123; url &#x27;https://maven<span class="variable">.aliyun</span><span class="variable">.com</span>/repository/google/&#x27; &#125;</span><br><span class="line">        maven &#123; url &#x27;https://maven<span class="variable">.aliyun</span><span class="variable">.com</span>/repository/public/&#x27;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath &#x27;com<span class="variable">.android</span><span class="variable">.tools</span><span class="variable">.build</span>:gradle:3.0.1&#x27;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="在-gradle-下创建init-gradle文件"><a href="#在-gradle-下创建init-gradle文件" class="headerlink" title="在~/.gradle/下创建init.gradle文件"></a>在<code>~/.gradle/</code>下创建<code>init.gradle</code>文件</h2><p>这种方式只会全局替换<code>allprojects</code>可的内容，对<code>buildscript</code>下无效。</p>
+<figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">allprojects&#123;</span><br><span class="line">    <span class="attribute">repositories &#123;</span></span><br><span class="line"><span class="attribute">        def ALIYUN_JCENTER_URL = &#x27;https</span>://maven<span class="variable">.aliyun</span><span class="variable">.com</span>/repository/public/&#x27;</span><br><span class="line">        def ALIYUN_GOOGLE_URL = &#x27;https://maven<span class="variable">.aliyun</span><span class="variable">.com</span>/repository/google/&#x27;</span><br><span class="line">        all &#123; ArtifactRepository repo -&gt;</span><br><span class="line">            if(repo instanceof MavenArtifactRepository)&#123;</span><br><span class="line">                def url = repo<span class="variable">.url</span><span class="variable">.toString</span>()</span><br><span class="line">                project<span class="variable">.logger</span><span class="variable">.lifecycle</span> &quot;cat url = $url&quot;</span><br><span class="line"></span><br><span class="line">                if (url<span class="variable">.startsWith</span>(&#x27;https://jcenter<span class="variable">.bintray</span><span class="variable">.com</span>/&#x27;)) &#123;</span><br><span class="line">                    project<span class="variable">.logger</span><span class="variable">.lifecycle</span> &quot;Repository $&#123;repo<span class="variable">.url</span>&#125; replaced by $ALIYUN_JCENTER_URL.&quot;</span><br><span class="line">                    remove repo</span><br><span class="line">                &#125;</span><br><span class="line">                if (url<span class="variable">.startsWith</span>(&#x27;https://dl<span class="variable">.google</span><span class="variable">.com</span>/dl/android/maven2/&#x27;)) &#123;</span><br><span class="line">                    project<span class="variable">.logger</span><span class="variable">.lifecycle</span> &quot;Repository $&#123;repo<span class="variable">.url</span>&#125; replaced by $ALIYUN_GOOGLE_URL.&quot;</span><br><span class="line">                    remove repo</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        maven &#123; url ALIYUN_JCENTER_URL &#125;</span><br><span class="line">        maven &#123; url ALIYUN_GOOGLE_URL &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/wuseal/76506684c63c5399150d9fd671cbc89b">国内全局加速Gradle依赖下载速度配置,把这个文件放到~&#x2F;.gradle目录下既可</a>文件名:<code>init.gradle.kts</code></p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by Seal.Wu on 2020/7/11</span></span><br><span class="line"><span class="comment"> * Description: Set up mirrors for Gradle Globally</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">val MAVEN_REPOSITORY_URL = <span class="string">&quot;https://maven.aliyun.com/repository/central&quot;</span></span><br><span class="line">val JCENTER_REPOSITORY_URL = <span class="string">&quot;https://maven.aliyun.com/repository/jcenter&quot;</span></span><br><span class="line">val GOOGLE_REPOSITORY_URL = <span class="string">&quot;https://maven.aliyun.com/repository/google&quot;</span></span><br><span class="line">val GRADLE_PLUGIN_REPOSITORY_URL = <span class="string">&quot;https://maven.aliyun.com/repository/gradle-plugin&quot;</span></span><br><span class="line"></span><br><span class="line">gradle.settingsEvaluated &#123;</span><br><span class="line">    pluginManagement &#123;</span><br><span class="line">        <span class="regexp">// Print repositories collection</span></span><br><span class="line"><span class="regexp">        println(&quot;Plugins Repositories names: &quot; + repositories.names)</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">        //</span> Clear repositories collection</span><br><span class="line">        repositories.clear()</span><br><span class="line"></span><br><span class="line">        <span class="regexp">// Add my Artifactory mirror</span></span><br><span class="line"><span class="regexp">        repositories &#123;</span></span><br><span class="line"><span class="regexp">            maven &#123;</span></span><br><span class="line"><span class="regexp">                name = &quot;Aly Gradle Plugin Repo&quot;</span></span><br><span class="line"><span class="regexp">                url = uri(GRADLE_PLUGIN_REPOSITORY_URL)</span></span><br><span class="line"><span class="regexp">            &#125;</span></span><br><span class="line"><span class="regexp">        &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">        //</span> Print repositories collection</span><br><span class="line">        println(<span class="string">&quot;Now Plugins Repositories names : &quot;</span> + repositories.names)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        all &#123;</span><br><span class="line">            <span class="keyword">if</span> (this <span class="keyword">is</span> MavenArtifactRepository) &#123;</span><br><span class="line">                val url = url.toString()</span><br><span class="line">                <span class="keyword">when</span> &#123;</span><br><span class="line">                    url.startsWith<span class="function"><span class="params">(<span class="string">&quot;https://repo1.maven.org/maven2&quot;</span>)</span>|| <span class="title">url</span>.<span class="title">startsWith</span><span class="params">(<span class="string">&quot;https://repo.maven.apache.org/maven2/&quot;</span>)</span> -&gt;</span> &#123;</span><br><span class="line">                        setUrl(MAVEN_REPOSITORY_URL)</span><br><span class="line">                    &#125;</span><br><span class="line">                    url.startsWith<span class="function"><span class="params">(<span class="string">&quot;https://jcenter.bintray.com/&quot;</span>)</span> -&gt;</span> &#123;</span><br><span class="line">                        setUrl(JCENTER_REPOSITORY_URL)</span><br><span class="line">                    &#125;</span><br><span class="line">                    url.startsWith<span class="function"><span class="params">(<span class="string">&quot;https://dl.google.com/dl/android/maven2&quot;</span>)</span> -&gt;</span> &#123;</span><br><span class="line">                        setUrl(GOOGLE_REPOSITORY_URL)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    buildscript &#123;</span><br><span class="line">        repositories &#123;</span><br><span class="line">            all &#123;</span><br><span class="line">                <span class="keyword">if</span> (this <span class="keyword">is</span> MavenArtifactRepository) &#123;</span><br><span class="line">                    val url = this.url.toString()</span><br><span class="line">                    <span class="keyword">when</span> &#123;</span><br><span class="line">                        url.startsWith<span class="function"><span class="params">(<span class="string">&quot;https://repo1.maven.org/maven2&quot;</span>)</span>||<span class="title">url</span>.<span class="title">startsWith</span><span class="params">(<span class="string">&quot;https://repo.maven.apache.org/maven2/&quot;</span>)</span> -&gt;</span> &#123;</span><br><span class="line">                            setUrl(MAVEN_REPOSITORY_URL)</span><br><span class="line">                        &#125;</span><br><span class="line">                        url.startsWith<span class="function"><span class="params">(<span class="string">&quot;https://jcenter.bintray.com/&quot;</span>)</span> -&gt;</span> &#123;</span><br><span class="line">                            setUrl(JCENTER_REPOSITORY_URL)</span><br><span class="line">                        &#125;</span><br><span class="line">                        url.startsWith<span class="function"><span class="params">(<span class="string">&quot;https://dl.google.com/dl/android/maven2&quot;</span>)</span> -&gt;</span> &#123;</span><br><span class="line">                            setUrl(GOOGLE_REPOSITORY_URL)</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    afterEvaluate &#123;</span><br><span class="line">        repositories &#123;</span><br><span class="line">            val lastUsedRepos = filterIsInstance&lt;MavenArtifactRepository&gt;().<span class="keyword">map</span> &#123;</span><br><span class="line">                <span class="literal">it</span>.name + <span class="string">&quot;($&#123;it.url&#125;)&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (lastUsedRepos.isNotEmpty()) &#123;</span><br><span class="line">                println(<span class="string">&quot;Use these repositories at last :\n $lastUsedRepos&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        buildscript &#123;</span><br><span class="line">            repositories &#123;</span><br><span class="line">                val lastUsedRepos = filterIsInstance&lt;MavenArtifactRepository&gt;().<span class="keyword">map</span> &#123;</span><br><span class="line">                    <span class="literal">it</span>.name + <span class="string">&quot;($&#123;it.url&#125;)&quot;</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (lastUsedRepos.isNotEmpty()) &#123;</span><br><span class="line">                    println(<span class="string">&quot;Use these repositories at last in build script:\n $lastUsedRepos&quot;</span>)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="as-3-6编译输出中文乱码"><a href="#as-3-6编译输出中文乱码" class="headerlink" title="as 3.6编译输出中文乱码"></a>as 3.6编译输出中文乱码</h2><p>打开<code>D:\Android\Android Studio\bin\studio64.exe.vmoptions</code>，添加：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">-Dfile.encoding</span>=UTF-<span class="number">8</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="修改-gradle目录位置"><a href="#修改-gradle目录位置" class="headerlink" title="修改.gradle目录位置"></a>修改<code>.gradle</code>目录位置</h2><p>默认<code>.gradle</code>在<code>~/.gradle/</code>，可以通过添加环境变量<code>GRADLE_USER_HOME</code>：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> <span class="attribute">GRADLE_HOME</span>=/usr/local/gradle</span><br><span class="line"><span class="built_in">export</span> <span class="attribute">PATH</span>=<span class="variable">$GRADLE_HOME</span>/bin:$PATH</span><br><span class="line"><span class="built_in">export</span> <span class="attribute">GRADLE_USER_HOME</span>=<span class="variable">$GRADLE_HOME</span>/.gradle</span><br></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">GRADLE_USER_HOME</span>=D:\cache\.gradle</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改mavenLocal-目录位置"><a href="#修改mavenLocal-目录位置" class="headerlink" title="修改mavenLocal()目录位置"></a>修改<code>mavenLocal()</code>目录位置</h2><p>默认<code>mavenLocal()</code>在<code>~/.m2/repository</code>下，修改方法：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">settings</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/SETTINGS/1.0.0&quot;</span> </span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> </span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line"> </span><br><span class="line">	<span class="tag">&lt;<span class="name">localRepository</span>&gt;</span>D:/cache/.m2/repo<span class="tag">&lt;/<span class="name">localRepository</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="修改-android目录位置"><a href="#修改-android目录位置" class="headerlink" title="修改.android目录位置"></a>修改<code>.android</code>目录位置</h2><p>默认<code>.android</code>在<code>~/.android/</code>，可以通过添加环境变量<code>ANDROID_SDK_HOME</code>：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> <span class="attribute">ANDROID_SDK_HOME</span>=/usr/local/Android</span><br></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ANDROID_SDK_HOME</span>=D:\Android</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="修改-AndroidStudio目录位置"><a href="#修改-AndroidStudio目录位置" class="headerlink" title="修改.AndroidStudio目录位置"></a>修改<code>.AndroidStudio</code>目录位置</h2><p>默认<code>.AndroidStudio</code>在<code>~/.AndroidStudio/</code>，可以通过修改Android Studio的安装目录下<code>bin/idea.properties</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">idea.config.path=D:/Android/.AndroidStudio3.6/config</span><br><span class="line">idea.system.path=D:/Android/.AndroidStudio3.6/system</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="github加速-推荐"><a href="#github加速-推荐" class="headerlink" title="github加速(推荐)"></a>github加速(推荐)</h2><p>国内github慢原因是dns污染，所以最直接的办法就是指定hosts。可以借助工具<a target="_blank" rel="noopener" href="https://oldj.github.io/SwitchHosts/">SwitchHosts</a>，</p>
+<p>添加一个github方案：</p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># GitHub Start</span><br><span class="line"><span class="number">52.74.223.119</span> github.com</span><br><span class="line"><span class="number">13.250.177.223</span> gist.github.com</span><br><span class="line"><span class="number">185.199.111.153</span> assets-cdn.github.com</span><br><span class="line"><span class="number">151.101.76.133</span> raw.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> gist.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> cloud.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> camo.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> avatars0.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> avatars1.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> avatars2.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> avatars3.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> avatars4.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> avatars5.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> avatars6.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> avatars7.githubusercontent.com</span><br><span class="line"><span class="number">151.101.76.133</span> avatars8.githubusercontent.com</span><br><span class="line"><span class="number">185.199.110.154</span> github.githubassets.com</span><br><span class="line"><span class="number">31.13.83.8</span> github.global.ssl.fastly.net</span><br><span class="line"></span><br><span class="line"># GitHub End</span><br></pre></td></tr></table></figure>
+
+<h2 id="github加速-如果你的科学上网渠道很快，可以用代理方案"><a href="#github加速-如果你的科学上网渠道很快，可以用代理方案" class="headerlink" title="github加速(如果你的科学上网渠道很快，可以用代理方案)"></a>github加速(如果你的科学上网渠道很快，可以用代理方案)</h2><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只指定github走代理</span></span><br><span class="line">git config <span class="params">--global</span> http.https:<span class="string">//github.com.proxy</span> socks5:<span class="string">//127.0.0.1</span><span class="function">:7891</span></span><br><span class="line">git config <span class="params">--global</span> https.https:<span class="string">//github.com.proxy</span> socks5:<span class="string">//127.0.0.1</span><span class="function">:7891</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 全都走代理</span></span><br><span class="line">git config <span class="params">--global</span> http.proxy socks5:<span class="string">//127.0.0.1</span><span class="function">:7891</span></span><br><span class="line">git config <span class="params">--global</span> https.proxy socks5:<span class="string">//127.0.0.1</span><span class="function">:7891</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有配置</span></span><br><span class="line">git config -l</span><br><span class="line"></span><br><span class="line"><span class="comment"># reset 代理设置</span></span><br><span class="line">git config <span class="params">--global</span> <span class="params">--unset</span> http.https:<span class="string">//github.com.proxy</span></span><br><span class="line">git config <span class="params">--global</span> <span class="params">--unset</span> https.https:<span class="string">//github.com.proxyy</span></span><br><span class="line">git config <span class="params">--global</span> <span class="params">--unset</span> http.proxy</span><br><span class="line">git config <span class="params">--global</span> <span class="params">--unset</span> https.proxy</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/android/" rel="tag"># android</a>
+              <a href="/tags/gradle/" rel="tag"># gradle</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/7504d8c/" rel="prev" title="记不住的：Android版本及别名">
+                  <i class="fa fa-angle-left"></i> 记不住的：Android版本及别名
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/db24c78d/" rel="next" title="Android开发常用脚本">
+                  Android开发常用脚本 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">京ICP备2022002584号-1 </a>
+      <img src="/images/beian.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">没用的喵叔</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
