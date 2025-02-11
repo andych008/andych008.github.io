@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"catuncle.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="windows11环境 scrcpy 电脑端编译环境，半小时搞定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrcpy系列：编译client">
+<meta property="og:url" content="https://catuncle.wang/posts/1/index.html">
+<meta property="og:site_name" content="老喵备忘录">
+<meta property="og:description" content="windows11环境 scrcpy 电脑端编译环境，半小时搞定">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/andych008/pic/raw/master/img/scrcpy/scrcpy.png">
+<meta property="article:published_time" content="2025-02-11T14:58:31.000Z">
+<meta property="article:modified_time" content="2025-02-11T16:51:36.857Z">
+<meta property="article:author" content="没用的喵叔">
+<meta property="article:tag" content="scrcpy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/andych008/pic/raw/master/img/scrcpy/scrcpy.png">
+
+
+<link rel="canonical" href="https://catuncle.wang/posts/1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://catuncle.wang/posts/1/","path":"posts/1/","title":"scrcpy系列：编译client"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>scrcpy系列：编译client | 老喵备忘录</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">老喵备忘录</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#python%E4%B8%8B%E5%AE%89%E8%A3%85meson"><span class="nav-number">1.</span> <span class="nav-text">python下安装meson</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python%E4%B8%8B%E5%AE%89%E8%A3%85ninja"><span class="nav-number">2.</span> <span class="nav-text">python下安装ninja</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows%E4%B8%8B%E5%AE%89%E8%A3%85mingw%EF%BC%88-MSYS2-%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">windows下安装mingw（ MSYS2 ）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mingw%E4%B8%8B%E5%AE%89%E8%A3%85%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="nav-number">4.</span> <span class="nav-text">mingw下安装运行时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mingw%E4%B8%8B%E5%AE%89%E8%A3%85%E6%9E%84%E5%BB%BA%E4%BE%9D%E8%B5%96%E9%A1%B9"><span class="nav-number">5.</span> <span class="nav-text">mingw下安装构建依赖项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git%E4%BB%A3%E7%90%86%EF%BC%88%E8%AE%BF%E9%97%AEgithub%EF%BC%8C%E4%BD%BF%E7%94%A8https%EF%BC%8C%E4%B8%8D%E8%A6%81%E7%94%A8ssh%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">git代理（访问github，使用https，不要用ssh）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fork-clone%E4%BB%A3%E7%A0%81%E5%88%B0D-work-scrcpy"><span class="nav-number">7.</span> <span class="nav-text">fork &amp; clone代码到D:\work\scrcpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">8.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C"><span class="nav-number">9.</span> <span class="nav-text">运行</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="没用的喵叔"
+      src="/images/1075578.gif">
+  <p class="site-author-name" itemprop="name">没用的喵叔</p>
+  <div class="site-description" itemprop="description">人老了爱忘，所以记下来</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/andych008" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;andych008" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:andych008@163.com" title="E-Mail → mailto:andych008@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://catuncle.wang/posts/1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1075578.gif">
+      <meta itemprop="name" content="没用的喵叔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="老喵备忘录">
+      <meta itemprop="description" content="人老了爱忘，所以记下来">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="scrcpy系列：编译client | 老喵备忘录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          scrcpy系列：编译client
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-02-11 22:58:31" itemprop="dateCreated datePublished" datetime="2025-02-11T22:58:31+08:00">2025-02-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-02-12 00:51:36" itemprop="dateModified" datetime="2025-02-12T00:51:36+08:00">2025-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/scrcpy/" itemprop="url" rel="index"><span itemprop="name">scrcpy</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p> windows11环境 scrcpy 电脑端编译环境，半小时搞定</p>
+<span id="more"></span> 
+
+<p>参考<a target="_blank" rel="noopener" href="https://github.com/Genymobile/scrcpy/blob/master/doc/build.md">https://github.com/Genymobile/scrcpy/blob/master/doc/build.md</a> ，主要是copy过来，只考虑windows环境，最方便开发的方案。</p>
+<h2 id="python下安装meson"><a href="#python下安装meson" class="headerlink" title="python下安装meson"></a>python下安装meson</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">D:\&gt;pip install meson</span><br><span class="line"></span><br><span class="line">D:\&gt;meson -v</span><br><span class="line">1.7.0</span><br><span class="line"></span><br><span class="line">D:\&gt;pip show meson</span><br><span class="line">Location: d:\python\python38\lib\site-packages</span><br></pre></td></tr></table></figure>
+
+<h2 id="python下安装ninja"><a href="#python下安装ninja" class="headerlink" title="python下安装ninja"></a>python下安装ninja</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install ninja//clion自带，不需要再安装。也可以通过其它方式安装，只是一个exe文件。</span><br></pre></td></tr></table></figure>
+
+<h2 id="windows下安装mingw（-MSYS2-）"><a href="#windows下安装mingw（-MSYS2-）" class="headerlink" title="windows下安装mingw（ MSYS2 ）"></a>windows下安装mingw（ <a target="_blank" rel="noopener" href="http://www.msys2.org/">MSYS2</a> ）</h2><blockquote>
+<p>MSYS2除了mingw还包括什么？&#x2F;&#x2F;问一下deepseek</p>
+<p>MSYS2 是一个为 Windows 提供类 Unix 开发环境的工具，除了 MinGW（用于生成原生 Windows 程序），它还包含包管理系统<strong>Pacman</strong></p>
+<ul>
+<li><strong>msys</strong>：提供 Unix 工具（如 <code>coreutils</code>, <code>curl</code>, <code>git</code>）和开发环境。</li>
+<li><strong>mingw32</strong>（32 位）和 <strong>mingw64</strong>（64 位）：包含针对 Windows 的 GCC 工具链和库。</li>
+<li><strong>ucrt64</strong>（新版）：基于 Universal C Runtime (UCRT) 的工具链，未来可能成为默认。</li>
+</ul>
+</blockquote>
+<h2 id="mingw下安装运行时"><a href="#mingw下安装运行时" class="headerlink" title="mingw下安装运行时"></a>mingw下安装运行时</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">runtime dependencies</span></span><br><span class="line">pacman -S mingw-w64-x86_64-SDL2 \</span><br><span class="line">          mingw-w64-x86_64-ffmpeg \</span><br><span class="line">          mingw-w64-x86_64-libusb</span><br></pre></td></tr></table></figure>
+
+<h2 id="mingw下安装构建依赖项"><a href="#mingw下安装构建依赖项" class="headerlink" title="mingw下安装构建依赖项"></a>mingw下安装构建依赖项</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">client build dependencies mingw-w64-x86_64-toolchain</span></span><br><span class="line">pacman -S mingw-w64-x86_64-make \</span><br><span class="line">          mingw-w64-x86_64-gcc \</span><br><span class="line">          mingw-w64-x86_64-pkg-config</span><br></pre></td></tr></table></figure>
+
+<h2 id="git代理（访问github，使用https，不要用ssh）"><a href="#git代理（访问github，使用https，不要用ssh）" class="headerlink" title="git代理（访问github，使用https，不要用ssh）"></a>git代理（访问github，使用https，不要用ssh）</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line">git config --global https.proxy https://127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+
+<h2 id="fork-clone代码到D-work-scrcpy"><a href="#fork-clone代码到D-work-scrcpy" class="headerlink" title="fork &amp; clone代码到D:\work\scrcpy"></a>fork &amp; clone代码到<code>D:\work\scrcpy</code></h2><h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><p>把提前下载的server端scrcpy-server放在”D:\work&quot;目录下</p>
+<p>如果编译有问题可以修改<code>D:\work\scrcpy\meson_options.txt</code>最小依赖</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">option</span>(<span class="string">&#x27;compile_server&#x27;</span>, <span class="attribute">type</span>: <span class="string">&#x27;boolean&#x27;</span>, <span class="attribute">value</span>: false, <span class="attribute">description</span>: <span class="string">&#x27;Build the server&#x27;</span>)</span><br><span class="line"><span class="selector-tag">option</span>(<span class="string">&#x27;v4l2&#x27;</span>, <span class="attribute">type</span>: <span class="string">&#x27;boolean&#x27;</span>, <span class="attribute">value</span>: false, <span class="attribute">description</span>: <span class="string">&#x27;Enable V4L2 feature when supported&#x27;</span>)</span><br><span class="line"><span class="selector-tag">option</span>(<span class="string">&#x27;usb&#x27;</span>, <span class="attribute">type</span>: <span class="string">&#x27;boolean&#x27;</span>, <span class="attribute">value</span>: false, <span class="attribute">description</span>: <span class="string">&#x27;Enable HID/OTG features when supported&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p>在scrcpy根目录下执行以下命令编译</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">meson setup y --buildtype=release --strip -Db_lto=true \</span><br><span class="line">-Dprebuilt_server=../scrcpy-server</span><br><span class="line">ninja -Cy  # DO NOT RUN AS ROOT</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/andych008/pic/raw/master/img/scrcpy/scrcpy.png" alt="image-20250211235315423"></p>
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>编译生成的文件在<code>D:\work_kt\scrcpy2\y\app</code>目录下。</p>
+<p>把动态链接库copy到这个目录（直接copy mingw下载的dll，运行报错，从官网下载或直接从github 下载scrcpy发布版本里找dll）</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/scrcpy/" rel="tag"># scrcpy</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/68e4eec2/" rel="prev" title="安卓to鸿蒙系列：ButterKnife(一)">
+                  <i class="fa fa-angle-left"></i> 安卓to鸿蒙系列：ButterKnife(一)
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">京ICP备2022002584号-1 </a>
+      <img src="/images/beian.png" alt="">
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">没用的喵叔</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
